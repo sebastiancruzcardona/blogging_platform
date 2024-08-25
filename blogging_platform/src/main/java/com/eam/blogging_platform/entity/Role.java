@@ -2,6 +2,8 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "role")
 public class Role {
@@ -19,6 +21,9 @@ public class Role {
     public Role() {
         super();
     }
+
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
 
     public Role(long id, String role, String description) {
         this.id = id;
