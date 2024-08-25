@@ -17,8 +17,8 @@ public class FollowedAuthors {
     private Date creationDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "follower_id")
+    private User follower;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -31,13 +31,13 @@ public class FollowedAuthors {
     public FollowedAuthors(long id, Date creationDate, User user, User author) {
         this.id = id;
         this.creationDate = creationDate;
-        this.user = user;
+        this.follower = user;
         this.author = author;
     }
 
     public FollowedAuthors(Date creationDate, User user, User author) {
         this.creationDate = creationDate;
-        this.user = user;
+        this.follower = user;
         this.author = author;
     }
 
@@ -53,12 +53,12 @@ public class FollowedAuthors {
         this.creationDate = creationDate;
     }
 
-    public User getUser() {
-        return user;
+    public User getFollower() {
+        return follower;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setFollower(User follower) {
+        this.follower = follower;
     }
 
     public User getAuthor() {

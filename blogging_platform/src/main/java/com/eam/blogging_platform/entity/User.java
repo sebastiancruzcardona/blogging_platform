@@ -2,7 +2,6 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
-import java.awt.print.Book;
 import java.util.Date;
 import java.util.List;
 
@@ -31,11 +30,11 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    private List<User> users;
+    @OneToMany(mappedBy = "follower")
+    private List<FollowedAuthors> followers;
 
     @OneToMany(mappedBy = "author")
-    private List<User> authors;
+    private List<FollowedAuthors> followed_authors;
 
     public User() {
         super();
