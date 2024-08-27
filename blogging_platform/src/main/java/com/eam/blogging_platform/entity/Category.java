@@ -2,6 +2,7 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -20,6 +21,9 @@ public class Category {
     @Column(name = "creation_date")
     @Temporal(TemporalType.DATE)
     private Date creationDate;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<CategoriesPost> categoriesPosts;
 
     public Category(){
         super();
