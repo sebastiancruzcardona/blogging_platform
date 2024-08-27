@@ -22,9 +22,9 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "status_id")
-    private Status status;*/
+    private Status status;
 
     @Column(name = "likes")
     private int likes;
@@ -98,13 +98,13 @@ public class Post {
         this.content = content;
     }
 
-    /*public Status getStatus() {
+    public Status getStatus() {
         return status;
-    }*/
+    }
 
-    /*public void setStatus(Status status) {
+    public void setStatus(Status status) {
         this.status = status;
-    }*/
+    }
 
     public int getLikes() {
         return likes;

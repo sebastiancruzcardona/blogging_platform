@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "tag_post")
 
-public class TagPost {
+public class TagsPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,10 +18,10 @@ public class TagPost {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public TagPost() {
+    public TagsPost() {
     }
 
-    public TagPost(int id) {
+    public TagsPost(int id) {
         this.id = id;
     }
 }

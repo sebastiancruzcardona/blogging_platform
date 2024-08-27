@@ -2,6 +2,8 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "status")
 public class Status {
@@ -11,6 +13,9 @@ public class Status {
 
     @Column(name = "status", length = 15)
     private String status;
+
+    @OneToMany(mappedBy = "status")
+    private List<Post> posts;
 
     public Status() {
         super();

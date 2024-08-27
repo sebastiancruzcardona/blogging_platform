@@ -18,10 +18,11 @@ public class Tag {
     @Column(name = "creation_date")
     private Date creation_date;
 
-    @OneToMany(mappedBy = "tag_post")
-    List<TagPost> tags;
+    @OneToMany(mappedBy = "tag")
+    List<TagsPost> tagsPosts;
 
     public Tag() {
+        super();
     }
 
     public Tag(int id, String tag, Date creation_date) {
