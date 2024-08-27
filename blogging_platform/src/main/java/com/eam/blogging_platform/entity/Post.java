@@ -1,5 +1,7 @@
 package com.eam.blogging_platform.entity;
+
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -8,7 +10,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -31,23 +33,45 @@ public class Post {
     private int dislikes;
 
     @Column(name = "creation_date")
+    @Temporal(TemporalType.DATE)
     private Date creation_date;
 
     @Column(name = "last_update_date")
+    @Temporal(TemporalType.DATE)
     private Date last_update_date;
 
     @Column(name = "publication")
     private Date publication;
 
     public Post() {
+        super();
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public Post(long id, User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publication) {
         this.id = id;
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.creation_date = creation_date;
+        this.last_update_date = last_update_date;
+        this.publication = publication;
+    }
+
+    public Post(User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publication) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.creation_date = creation_date;
+        this.last_update_date = last_update_date;
+        this.publication = publication;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public User getUser() {
