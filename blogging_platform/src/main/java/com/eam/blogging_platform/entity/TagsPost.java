@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tag_post")
-
 public class TagsPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -21,7 +20,7 @@ public class TagsPost {
     public TagsPost() {
     }
 
-    public TagsPost(int id) {
+    public TagsPost(long id) {
         this.id = id;
     }
 }
