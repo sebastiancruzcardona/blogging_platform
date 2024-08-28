@@ -51,6 +51,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<CategoriesPost> categoriesPosts;
 
+    @OneToMany(mappedBy = "post")
+    private List<TagsPost> tagsPosts;
+
     public Post() {
         super();
     }
