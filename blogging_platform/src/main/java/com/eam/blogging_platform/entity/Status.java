@@ -9,7 +9,7 @@ import java.util.List;
 public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "status", length = 15)
     private String status;
@@ -30,7 +30,7 @@ public class Status {
         this.status = status;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
