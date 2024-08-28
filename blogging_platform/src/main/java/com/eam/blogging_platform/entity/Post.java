@@ -51,7 +51,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<CategoriesPost> categoriesPosts;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<TagsPost> tagsPosts;
 
     public Post() {
