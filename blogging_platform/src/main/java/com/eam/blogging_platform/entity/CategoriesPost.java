@@ -21,7 +21,7 @@ public class CategoriesPost {
         super();
     }
 
-    public CategoriesPost(int id, Post post, Category category) {
+    public CategoriesPost(long id, Post post, Category category) {
         this.id = id;
         this.post = post;
         this.category = category;
