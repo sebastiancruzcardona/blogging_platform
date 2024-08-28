@@ -42,7 +42,8 @@ public class Post {
     private Date lastUpdateDate;
 
     @Column(name = "publication")
-    private Date publication;
+    @Temporal(TemporalType.DATE)
+    private Date publicationDate;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
@@ -51,7 +52,7 @@ public class Post {
         super();
     }
 
-    public Post(long id, User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publication) {
+    public Post(long id, User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publicationDate) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -60,10 +61,10 @@ public class Post {
         this.dislikes = dislikes;
         this.creationDate = creation_date;
         this.lastUpdateDate = last_update_date;
-        this.publication = publication;
+        this.publicationDate = publicationDate;
     }
 
-    public Post(User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publication) {
+    public Post(User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publicationDate) {
         this.user = user;
         this.title = title;
         this.content = content;
@@ -71,7 +72,7 @@ public class Post {
         this.dislikes = dislikes;
         this.creationDate = creation_date;
         this.lastUpdateDate = last_update_date;
-        this.publication = publication;
+        this.publicationDate = publicationDate;
     }
 
     public long getId() {
@@ -143,11 +144,11 @@ public class Post {
     }
 
     public Date getPublication() {
-        return publication;
+        return publicationDate;
     }
 
     public void setPublication(Date publication) {
-        this.publication = publication;
+        this.publicationDate = publication;
     }
 }
 
