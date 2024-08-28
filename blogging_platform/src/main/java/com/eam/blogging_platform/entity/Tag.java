@@ -1,8 +1,9 @@
 package com.eam.blogging_platform.entity;
-import java.util.Date;
-import java.util.List;
 
 import jakarta.persistence.*;
+
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "tag")
@@ -10,33 +11,33 @@ public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "tag", length = 40)
     private String tag;
 
-    @Column(name = "creation_date")
-    private Date creation_date;
+    @Column(name = "creationDate")
+    private Date creationDate;
 
-    @OneToMany(mappedBy = "tag")
-    List<TagsPost> tagsPosts;
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    private List<TagsPost> tagsPosts;
 
     public Tag() {
         super();
     }
 
-    public Tag(int id, String tag, Date creation_date) {
+    public Tag(int id, String tag, Date creationDate) {
         this.id = id;
         this.tag = tag;
-        this.creation_date = creation_date;
+        this.creationDate = creationDate;
     }
 
-    public Tag(String tag, Date creation_date) {
+    public Tag(String tag, Date creationDate) {
         this.tag = tag;
-        this.creation_date = creation_date;
+        this.creationDate = creationDate;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -52,12 +53,12 @@ public class Tag {
         this.tag = tag;
     }
 
-    public Date getCreation_date() {
-        return creation_date;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }
 
