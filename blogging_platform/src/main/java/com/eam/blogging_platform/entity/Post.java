@@ -35,11 +35,11 @@ public class Post {
 
     @Column(name = "creation_date")
     @Temporal(TemporalType.DATE)
-    private Date creation_date;
+    private Date creationDate;
 
-    @Column(name = "last_update_date")
+    @Column(name = "lastUpdateDate")
     @Temporal(TemporalType.DATE)
-    private Date last_update_date;
+    private Date lastUpdateDate;
 
     @Column(name = "publication")
     private Date publication;
@@ -58,8 +58,8 @@ public class Post {
         this.content = content;
         this.likes = likes;
         this.dislikes = dislikes;
-        this.creation_date = creation_date;
-        this.last_update_date = last_update_date;
+        this.creationDate = creation_date;
+        this.lastUpdateDate = last_update_date;
         this.publication = publication;
     }
 
@@ -69,8 +69,8 @@ public class Post {
         this.content = content;
         this.likes = likes;
         this.dislikes = dislikes;
-        this.creation_date = creation_date;
-        this.last_update_date = last_update_date;
+        this.creationDate = creation_date;
+        this.lastUpdateDate = last_update_date;
         this.publication = publication;
     }
 
@@ -127,19 +127,19 @@ public class Post {
     }
 
     public Date getCreation_date() {
-        return creation_date;
+        return creationDate;
     }
 
     public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+        this.creationDate = creation_date;
     }
 
-    public Date getLast_update_date() {
-        return last_update_date;
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
     }
 
-    public void setLast_update_date(Date last_update_date) {
-        this.last_update_date = last_update_date;
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 
     public Date getPublication() {

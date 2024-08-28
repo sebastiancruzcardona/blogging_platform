@@ -24,10 +24,12 @@ public class Comment {
     private Post post;
 
     @Column(name = "creation_date")
-    private Date creation_date;
+    @Temporal(TemporalType.DATE)
+    private Date creationDate;
 
     @Column(name = "last_update")
-    private Date last_update;
+    @Temporal(TemporalType.DATE)
+    private Date lastUpdate;
 
     public Comment() {
     }
