@@ -10,7 +10,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "comment", length = 3000)
     private String comment;
@@ -32,7 +32,7 @@ public class Comment {
     public Comment() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
