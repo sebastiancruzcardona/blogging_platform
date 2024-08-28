@@ -45,10 +45,10 @@ public class Post {
     @Temporal(TemporalType.DATE)
     private Date publicationDate;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CategoriesPost> categoriesPosts;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -154,7 +154,19 @@ public class Post {
     }
 
     public void setPublication(Date publication) {
-        this.publicationDate     = publication;
+        this.publicationDate = publication;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public List<CategoriesPost> getCategoriesPosts() {
+        return categoriesPosts;
+    }
+
+    public List<TagsPost> getTagsPosts() {
+        return tagsPosts;
     }
 }
 
