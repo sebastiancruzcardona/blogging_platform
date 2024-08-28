@@ -38,10 +38,6 @@ public class Comment {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -58,7 +54,29 @@ public class Comment {
         this.post = post;
     }
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 }
 
 
