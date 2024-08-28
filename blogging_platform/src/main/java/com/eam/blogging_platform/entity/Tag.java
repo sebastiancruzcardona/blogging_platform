@@ -26,10 +26,11 @@ public class Tag {
         super();
     }
 
-    public Tag(int id, String tag, Date creationDate) {
+    public Tag(long id, String tag, Date creationDate, List<TagsPost> tagsPosts) {
         this.id = id;
         this.tag = tag;
         this.creationDate = creationDate;
+        this.tagsPosts = tagsPosts;
     }
 
     public Tag(String tag, Date creationDate) {
@@ -59,6 +60,10 @@ public class Tag {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public List<TagsPost> getTagsPosts() {
+        return tagsPosts;
     }
 }
 
