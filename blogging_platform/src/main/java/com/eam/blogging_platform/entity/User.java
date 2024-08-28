@@ -104,4 +104,20 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public List<FollowedAuthors> getFollowers() {
+        return followers;
+    }
+
+    public List<FollowedAuthors> getFollowed_authors() {
+        return followed_authors;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
 }
