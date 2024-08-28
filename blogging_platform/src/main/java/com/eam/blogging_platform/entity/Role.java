@@ -18,12 +18,12 @@ public class Role {
     @Column(name = "description", length = 250)
     private String description;
 
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
+
     public Role() {
         super();
     }
-
-    @OneToMany(mappedBy = "role")
-    private List<User> users;
 
     public Role(long id, String role, String description) {
         this.id = id;
