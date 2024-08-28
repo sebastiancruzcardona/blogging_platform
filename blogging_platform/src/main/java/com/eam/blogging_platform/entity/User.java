@@ -34,7 +34,10 @@ public class User {
     private List<FollowedAuthors> followers;
 
     @OneToMany(mappedBy = "author")
-    private List<FollowedAuthors> followed_authors;
+    private List<FollowedAuthors> followed_authors; //is it possible to delete author or follower?
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 
     public User() {
         super();
