@@ -3,6 +3,7 @@ package com.eam.blogging_platform.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -42,6 +43,9 @@ public class Post {
 
     @Column(name = "publication")
     private Date publication;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     public Post() {
         super();
