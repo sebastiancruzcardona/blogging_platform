@@ -20,7 +20,7 @@ public class Post {
     @Column(name = "title", length = 150)
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 6000)
     private String content;
 
     @ManyToOne
@@ -148,7 +148,7 @@ public class Post {
     }
 
     public void setPublication(Date publication) {
-        this.publicationDate = publication;
+        this.publicationDate     = publication;
     }
 }
 
