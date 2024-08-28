@@ -69,5 +69,9 @@ public class Category {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
+
+    public List<CategoriesPost> getCategoriesPosts() {
+        return categoriesPosts;
+    }
 }
 
