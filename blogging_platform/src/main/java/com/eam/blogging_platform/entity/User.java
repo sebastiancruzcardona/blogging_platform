@@ -46,19 +46,21 @@ public class User {
         super();
     }
 
-    public User(long id, String username, String email, String password, Date creationDate) {
+    public User(long id, String username, String email, String password, Date creationDate, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.creationDate = creationDate;
+        this.role = role;
     }
 
-    public User(String username, String email, String password, Date creationDate) {
+    public User(String username, String email, String password, Date creationDate, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.creationDate = creationDate;
+        this.role = role;
     }
 
     public long getId() {
