@@ -32,6 +32,24 @@ public class Comment {
     private Date lastUpdate;
 
     public Comment() {
+        super();
+    }
+
+    public Comment(long id, String comment, User user, Post post, Date creationDate, Date lastUpdate) {
+        this.id = id;
+        this.comment = comment;
+        this.user = user;
+        this.post = post;
+        this.creationDate = creationDate;
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Comment(String comment, User user, Post post, Date creationDate, Date lastUpdate) {
+        this.comment = comment;
+        this.user = user;
+        this.post = post;
+        this.creationDate = creationDate;
+        this.lastUpdate = lastUpdate;
     }
 
     public long getId() {
