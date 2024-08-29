@@ -27,11 +27,6 @@ public class CategoriesPost {
         this.category = category;
     }
 
-    public CategoriesPost(Post post, Category category) {
-        this.post = post;
-        this.category = category;
-    }
-
     public long getId() {
         return id;
     }
