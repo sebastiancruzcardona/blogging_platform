@@ -30,7 +30,7 @@ public class Tag {
         this.id = id;
         this.tag = tag;
         this.creationDate = creationDate;
-        
+
     }
 
     public Tag(String tag, Date creationDate) {
