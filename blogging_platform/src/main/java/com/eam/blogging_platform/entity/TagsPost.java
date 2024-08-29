@@ -18,6 +18,7 @@ public class TagsPost {
     private Tag tag;
 
     public TagsPost() {
+        super();
     }
 
     public TagsPost(long id, Post post, Tag tag) {
