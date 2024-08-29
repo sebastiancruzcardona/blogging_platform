@@ -25,7 +25,7 @@ public class Status {
         this.id = id;
         this.status = status;
     }
-
+    
     public Status(String status) {
         this.status = status;
     }
@@ -40,5 +40,9 @@ public class Status {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
     }
 }
