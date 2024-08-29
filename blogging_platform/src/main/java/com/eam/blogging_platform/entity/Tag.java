@@ -26,11 +26,11 @@ public class Tag {
         super();
     }
 
-    public Tag(long id, String tag, Date creationDate, List<TagsPost> tagsPosts) {
+    public Tag(long id, String tag, Date creationDate) {
         this.id = id;
         this.tag = tag;
         this.creationDate = creationDate;
-        this.tagsPosts = tagsPosts;
+        
     }
 
     public Tag(String tag, Date creationDate) {
