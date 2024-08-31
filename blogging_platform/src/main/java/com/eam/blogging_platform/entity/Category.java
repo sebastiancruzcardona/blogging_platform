@@ -1,7 +1,7 @@
 package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,8 +19,7 @@ public class Category {
     private String description;
 
     @Column(name = "creation_date")
-    @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<CategoriesPost> categoriesPosts;
@@ -29,14 +28,14 @@ public class Category {
         super();
     }
 
-    public Category(long id, String category, String description, Date creationDate) {
+    public Category(long id, String category, String description, LocalDateTime creationDate) {
         this.id = id;
         this.category = category;
         this.description = description;
         this.creationDate = creationDate;
     }
 
-    public Category(String category, String description, Date creationDate) {
+    public Category(String category, String description, LocalDateTime creationDate) {
         this.category = category;
         this.description = description;
         this.creationDate = creationDate;
@@ -62,11 +61,11 @@ public class Category {
         this.description = description;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
