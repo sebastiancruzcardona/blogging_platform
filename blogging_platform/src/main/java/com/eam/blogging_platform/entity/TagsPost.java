@@ -3,7 +3,7 @@ package com.eam.blogging_platform.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tag_post")
+@Table(name = "tags_post")
 public class TagsPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
