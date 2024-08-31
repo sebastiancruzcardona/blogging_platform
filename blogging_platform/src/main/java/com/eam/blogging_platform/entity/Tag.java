@@ -2,7 +2,7 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -16,8 +16,8 @@ public class Tag {
     @Column(name = "tag", length = 40)
     private String tag;
 
-    @Column(name = "creationDate")
-    private Date creationDate;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private List<TagsPost> tagsPosts;
@@ -26,14 +26,14 @@ public class Tag {
         super();
     }
 
-    public Tag(long id, String tag, Date creationDate) {
+    public Tag(long id, String tag, LocalDateTime creationDate) {
         this.id = id;
         this.tag = tag;
         this.creationDate = creationDate;
 
     }
 
-    public Tag(String tag, Date creationDate) {
+    public Tag(String tag, LocalDateTime creationDate) {
         this.tag = tag;
         this.creationDate = creationDate;
     }
@@ -54,11 +54,11 @@ public class Tag {
         this.tag = tag;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
