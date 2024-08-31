@@ -26,28 +26,28 @@ public class Comment {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    @Column(name = "last_update")
-    private LocalDateTime lastUpdate;
+    @Column(name = "last_update_date")
+    private LocalDateTime lastUpdateDate;
 
     public Comment() {
         super();
     }
 
-    public Comment(long id, String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdate) {
+    public Comment(long id, String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.comment = comment;
         this.user = user;
         this.post = post;
         this.creationDate = creationDate;
-        this.lastUpdate = lastUpdate;
+        this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Comment(String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdate) {
+    public Comment(String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdateDate) {
         this.comment = comment;
         this.user = user;
         this.post = post;
         this.creationDate = creationDate;
-        this.lastUpdate = lastUpdate;
+        this.lastUpdateDate = lastUpdateDate;
     }
 
     public long getId() {
@@ -86,12 +86,12 @@ public class Comment {
         this.creationDate = creationDate;
     }
 
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
     }
 
-    public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 }
 
