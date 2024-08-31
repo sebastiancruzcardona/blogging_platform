@@ -2,7 +2,7 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,8 +23,7 @@ public class User {
     private String password;
 
     @Column(name = "creation_date")
-    @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -46,7 +45,7 @@ public class User {
         super();
     }
 
-    public User(long id, String username, String email, String password, Date creationDate, Role role) {
+    public User(long id, String username, String email, String password, LocalDateTime creationDate, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -55,7 +54,7 @@ public class User {
         this.role = role;
     }
 
-    public User(String username, String email, String password, Date creationDate, Role role) {
+    public User(String username, String email, String password, LocalDateTime creationDate, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -91,11 +90,11 @@ public class User {
         this.password = password;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
