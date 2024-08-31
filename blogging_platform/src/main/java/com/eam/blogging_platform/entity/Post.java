@@ -2,7 +2,7 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -34,16 +34,13 @@ public class Post {
     private int dislikes;
 
     @Column(name = "creation_date")
-    @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
-    @Column(name = "lastUpdateDate")
-    @Temporal(TemporalType.DATE)
-    private Date lastUpdateDate;
+    @Column(name = "last_Update_Date")
+    private LocalDateTime lastUpdateDate;
 
-    @Column(name = "publication")
-    @Temporal(TemporalType.DATE)
-    private Date publicationDate;
+    @Column(name = "publication_date")
+    private LocalDateTime publicationDate;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -58,7 +55,7 @@ public class Post {
         super();
     }
 
-    public Post(long id, User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publicationDate) {
+    public Post(long id, User user, String title, String content, int likes, int dislikes, LocalDateTime creation_date, LocalDateTime last_update_date, LocalDateTime publicationDate) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -70,7 +67,7 @@ public class Post {
         this.publicationDate = publicationDate;
     }
 
-    public Post(User user, String title, String content, int likes, int dislikes, Date creation_date, Date last_update_date, Date publicationDate) {
+    public Post(User user, String title, String content, int likes, int dislikes, LocalDateTime creation_date, LocalDateTime last_update_date, LocalDateTime publicationDate) {
         this.user = user;
         this.title = title;
         this.content = content;
@@ -133,27 +130,27 @@ public class Post {
         this.dislikes = dislikes;
     }
 
-    public Date getCreation_date() {
+    public LocalDateTime getCreation_date() {
         return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
+    public void setCreation_date(LocalDateTime creation_date) {
         this.creationDate = creation_date;
     }
 
-    public Date getLastUpdateDate() {
+    public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(Date lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Date getPublication() {
+    public LocalDateTime getPublication() {
         return publicationDate;
     }
 
-    public void setPublication(Date publication) {
+    public void setPublication(LocalDateTime publication) {
         this.publicationDate = publication;
     }
 
