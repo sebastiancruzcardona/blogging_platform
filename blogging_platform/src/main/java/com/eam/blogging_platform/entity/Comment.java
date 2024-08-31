@@ -2,7 +2,7 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comment")
@@ -24,18 +24,16 @@ public class Comment {
     private Post post;
 
     @Column(name = "creation_date")
-    @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     @Column(name = "last_update")
-    @Temporal(TemporalType.DATE)
-    private Date lastUpdate;
+    private LocalDateTime lastUpdate;
 
     public Comment() {
         super();
     }
 
-    public Comment(long id, String comment, User user, Post post, Date creationDate, Date lastUpdate) {
+    public Comment(long id, String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdate) {
         this.id = id;
         this.comment = comment;
         this.user = user;
@@ -44,7 +42,7 @@ public class Comment {
         this.lastUpdate = lastUpdate;
     }
 
-    public Comment(String comment, User user, Post post, Date creationDate, Date lastUpdate) {
+    public Comment(String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdate) {
         this.comment = comment;
         this.user = user;
         this.post = post;
@@ -80,19 +78,19 @@ public class Comment {
         this.user = user;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Date getLastUpdate() {
+    public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Date lastUpdate) {
+    public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 }
