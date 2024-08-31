@@ -2,7 +2,7 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "followed_authors")
@@ -13,8 +13,7 @@ public class FollowedAuthors {
     private long id;
 
     @Column(name = "creation_date")
-    @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    private LocalDate creationDate;
 
     @ManyToOne
     @JoinColumn(name = "follower_id")
@@ -28,14 +27,14 @@ public class FollowedAuthors {
         super();
     }
 
-    public FollowedAuthors(long id, Date creationDate, User user, User author) {
+    public FollowedAuthors(long id, LocalDate creationDate, User user, User author) {
         this.id = id;
         this.creationDate = creationDate;
         this.follower = user;
         this.author = author;
     }
 
-    public FollowedAuthors(Date creationDate, User user, User author) {
+    public FollowedAuthors(LocalDate creationDate, User user, User author) {
         this.creationDate = creationDate;
         this.follower = user;
         this.author = author;
@@ -45,11 +44,11 @@ public class FollowedAuthors {
         return id;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
