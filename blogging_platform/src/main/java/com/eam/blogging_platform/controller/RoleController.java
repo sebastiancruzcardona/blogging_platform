@@ -53,7 +53,7 @@ public class RoleController {
     }
 
     //This method refers to roleService.findById() and roleService.deleteById() methods. Finds a specific role searching by id and deletes it
-    //If the role is found, sets the attributes to the role in edition, saves to update and returns a 200 OK Status.
+    //If the role is found, deletes it.
     //If there is not a role identified by that id, returns 404 Not Found Status
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable long id){
