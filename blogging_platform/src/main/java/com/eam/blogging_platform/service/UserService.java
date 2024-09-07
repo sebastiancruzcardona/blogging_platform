@@ -29,7 +29,7 @@ public class UserService {
     }
 
     //This method deletes a specific user by using its id
-    public void delete(long id){
+    public void deleteById(long id){
         userRepository.deleteById(id);
     }
 }

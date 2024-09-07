@@ -60,7 +60,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable long id){
         if(userService.findById(id).isPresent()){
-            userService.delete(id);
+            userService.deleteById(id);
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();

@@ -33,7 +33,7 @@ public class User {
     private List<FollowedAuthors> followers;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<FollowedAuthors> followed_authors; //is it possible to delete author or follower?
+    private List<FollowedAuthors> followed_authors; //is it possible to deleteById author or follower?
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
