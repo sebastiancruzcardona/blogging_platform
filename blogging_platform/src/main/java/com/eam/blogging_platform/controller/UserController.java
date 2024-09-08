@@ -37,7 +37,7 @@ public class UserController {
     }
 
     //This method refers to userService.findById() and userService.save() methods. Finds a specific user searching by id and updates it
-    //If the user is found, sets the attributes to the role in edition, saves to update and returns a 200 OK Status.
+    //If the user is found, sets the attributes to the user in edition, saves to update and returns a 200 OK Status.
     //If there is not a user identified by that id, returns 404 Not Found Status
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User userDetails){

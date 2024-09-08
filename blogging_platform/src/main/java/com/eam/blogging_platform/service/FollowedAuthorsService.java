@@ -28,6 +28,7 @@ public class FollowedAuthorsService {
         return followedAuthorsRepository.save(followedAuthors);
     }
 
+    //This method deletes a specific followedauthor register by using its id
     public void deleteById(long id){
         followedAuthorsRepository.deleteById(id);
     }
