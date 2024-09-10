@@ -10,22 +10,28 @@ import java.util.Optional;
 
 @Service
 public class CommentService {
-    @Autowired
+    @Autowired //Singleton backwards for just one CommentRepository instance
     private CommentRepository commentRepository;
+
+    //This method brings out every Comment stored in table comment in database
 
     public List<Comment> findAll() {
         return commentRepository.findAll();
     }
 
-    public Optional<Comment> findById(long id){
+    //This method finds a specific comment searching by id
+    public Optional<Comment> findById(long id) {
         return commentRepository.findById(id);
     }
 
-    public Comment save(Comment comment){
+    //This method saves a new comment in database table comment
+    public Comment save(Comment comment) {
         return commentRepository.save(comment);
     }
 
-    public void deleteById(long id){
+    //This method deletes a specific comment by using its id
+
+    public void deleteById(long id) {
         commentRepository.deleteById(id);
     }
 }

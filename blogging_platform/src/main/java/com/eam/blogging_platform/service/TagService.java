@@ -9,20 +9,25 @@ import java.util.Optional;
 
 @Service
 public class TagService {
-    @Autowired
+    @Autowired //Singleton backwards for just one TagRepository instance
     private TagService tagService;
 
+    //This method brings out every Tag stored in table tag in database
     public List<Tag> findAll() {
         return tagService.findAll();
     }
 
+    //This method finds a specific tag searching by id
     public Optional<Tag> findById(long id) {
         return tagService.findById(id);
     }
 
+    //This method saves a new tag in database table tag
     public Tag save(Tag tag) {
         return tagService.save(tag);
     }
+
+    //This method deletes a specific tag by using its id
 
     public void deleteById(long id){
         tagService.deleteById(id);
