@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/tagsPost")
+@RequestMapping("/api/tagsPosts")
 public class TagsPostController {
 
     @Autowired //Singleton backwards for just one tagsPostService instance

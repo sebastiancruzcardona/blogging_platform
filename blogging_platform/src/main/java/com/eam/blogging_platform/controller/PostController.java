@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/post")
+@RequestMapping("/api/posts")
 public class PostController {
 
     @Autowired //Singleton backwards for just one PostService instance

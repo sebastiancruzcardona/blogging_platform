@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/roles")
+@RequestMapping("/api/tags")
 public class TagController {
 
     @Autowired //Singleton backwards for just one TagService instance
