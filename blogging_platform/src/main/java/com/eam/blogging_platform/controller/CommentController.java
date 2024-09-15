@@ -1,9 +1,7 @@
 package com.eam.blogging_platform.controller;
 
 import com.eam.blogging_platform.entity.Comment;
-import com.eam.blogging_platform.entity.Post;
 import com.eam.blogging_platform.service.CommentService;
-import com.eam.blogging_platform.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
