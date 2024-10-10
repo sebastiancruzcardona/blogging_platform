@@ -13,7 +13,7 @@ public class RoleService {
     @Autowired //Singleton backwards for just one RoleRepository instance
     private RoleRepository roleRepository;
 
-    //This method brings out every Role stored in table role in database
+    //This method brings out every RoleDTO stored in table role in database
     public List<Role> findAll() {
         return roleRepository.findAll();
     }
