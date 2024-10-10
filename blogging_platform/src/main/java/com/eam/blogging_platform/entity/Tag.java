@@ -3,6 +3,7 @@ package com.eam.blogging_platform.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -54,7 +55,7 @@ public class Tag {
         this.tag = tag;
     }
 
-    public LocalDateTime getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
