@@ -1,7 +1,6 @@
 package com.eam.blogging_platform.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public class RoleDTO {
 
