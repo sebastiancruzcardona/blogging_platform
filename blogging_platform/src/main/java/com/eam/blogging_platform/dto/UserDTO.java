@@ -16,7 +16,6 @@ public class UserDTO {
     @Pattern(regexp = "^(?=.*\\d)(?=.*[@#$%^&+=!]).+$", message = "The string must contain at least one number and one special character")
     private String password;
 
-    @Pattern(regexp = "\\d+", message = "Only numbers must be provided")
     @Min(1)
     private Long roleID;
 

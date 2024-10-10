@@ -34,14 +34,14 @@ public class RoleController {
         else{
           return ResponseEntity.notFound().build();
         }*/
-    public ResponseEntity<RoleDTOGetPostPut> getBankById(@PathVariable long id){
+    public ResponseEntity<RoleDTOGetPostPut> getRoleById(@PathVariable long id){
         Optional<RoleDTOGetPostPut> roleDTOGetPutPost = roleService.findById(id);
         return roleDTOGetPutPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     //This method refers to roleService.save() method. Saves a new role in database table role
     @PostMapping
-    public RoleDTOGetPostPut createBank(@Valid @RequestBody RoleDTO roleDTO){
+    public RoleDTOGetPostPut createRole(@Valid @RequestBody RoleDTO roleDTO){
         return roleService.save(roleDTO);
     }
     
@@ -49,7 +49,7 @@ public class RoleController {
     //This method calls the update method from roleService that needs an id and a RoleDTO object and returns an Optional
     //Then, tries to map the Optional RoleDTOGetPostPut by using the .ok() function from ResponseEntity, for this the roleDTOGetPostPut has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
-    public ResponseEntity<RoleDTOGetPostPut> updateBank(@PathVariable long id, @Valid @RequestBody RoleDTO roleDTO){
+    public ResponseEntity<RoleDTOGetPostPut> updateRole(@PathVariable long id, @Valid @RequestBody RoleDTO roleDTO){
         Optional<RoleDTOGetPostPut> roleDTOGetPutPost = roleService.update(id, roleDTO);
         return roleDTOGetPutPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -59,7 +59,7 @@ public class RoleController {
     //If the role is found, deletes it.
     //If there is not a role identified by that id, returns 404 Not Found Status
     @DeleteMapping("{id}")
-    public ResponseEntity<Role> deleteBank(@PathVariable long id){
+    public ResponseEntity<Role> deleteRole(@PathVariable long id){
         if(roleService.deleteById(id)){
             return ResponseEntity.ok().build();
         }else{
