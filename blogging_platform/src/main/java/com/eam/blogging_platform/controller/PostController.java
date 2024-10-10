@@ -17,7 +17,7 @@ public class PostController {
     @Autowired //Singleton backwards for just one PostService instance
     private PostService postService;
 
-    //This method refers to roleService.findAll() method. Brings out every Role stored in database table role as a List of roles
+    //This method refers to roleService.findAll() method. Brings out every RoleDTO stored in database table role as a List of roles
     @GetMapping
     public List<Post> getAllPosts() {
         return postService.findAll();
