@@ -1,9 +1,13 @@
 package com.eam.blogging_platform.service;
 
+import com.eam.blogging_platform.dto.FollowedAuthorDTO;
+import com.eam.blogging_platform.dto.FollowedAuthorDTOGetPostPut;
 import com.eam.blogging_platform.dto.UserDTO;
 import com.eam.blogging_platform.dto.UserDTOGetPostPut;
+import com.eam.blogging_platform.entity.FollowedAuthor;
 import com.eam.blogging_platform.entity.Role;
 import com.eam.blogging_platform.entity.User;
+import com.eam.blogging_platform.repository.FollowedAuthorsRepository;
 import com.eam.blogging_platform.repository.RoleRepository;
 import com.eam.blogging_platform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,9 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private FollowedAuthorsRepository followedAuthorsRepository;
 
     //This method finds all users stored in database and returns a list of UserDTOGetPostPut
     //Calls userRepository.findAll() and uses a for cycle to iterate over the users and to add to the Arraylist to return
@@ -94,6 +101,89 @@ public class UserService {
     public boolean deleteById(long id){
         if(userRepository.findById(id).isPresent()){
             userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    //FollowedAuthor methods
+
+    //This method finds all FollowedAuthors stored in database and returns a list of FollowedAuthorDTOGetPostPut
+    //Calls userRepository.findAll() and uses a for cycle to iterate over the users and to add to the Arraylist to return
+    public List<FollowedAuthorDTOGetPostPut> findAllFollowedAuthors(){
+        List<FollowedAuthorDTOGetPostPut> followedAuthorsToReturn = new ArrayList<>();
+        List<FollowedAuthor> followedAuthors = followedAuthorsRepository.findAll();
+        for (FollowedAuthor followedAuthor : followedAuthors) {
+            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
+            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor);
+            followedAuthorsToReturn.add(followedAuthorDTOGetPostPut);
+        }
+        return followedAuthorsToReturn;
+    }
+
+    //This method returns an Optional of FollowedAuthorDTOGetPostPut
+    //Using id, if the searched user exist, returns the optional, if not, returns an empty Optional
+    public Optional<FollowedAuthorDTOGetPostPut> findFollowedAuthorById(long id){
+        Optional<FollowedAuthor> followedAuthor = followedAuthorsRepository.findById(id);
+        if(followedAuthor.isPresent()){
+            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
+            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor.get());
+            return Optional.of(followedAuthorDTOGetPostPut);
+        }
+        return Optional.empty();
+    }
+
+    //This method returns an Optional of FollowedAuthorDTOGetPostPut. This returns the list of follows of a follower
+    //Calls followedAuthorsRepository.findFollowedAuthorsByFollowerId() and uses a for cycle to iterate over the users and to add to the Arraylist to return
+    public List<FollowedAuthorDTOGetPostPut> findFollowedAuthorsByFollowerId(long id){
+        List<FollowedAuthorDTOGetPostPut> followedAuthorsToReturn = new ArrayList<>();
+        List<FollowedAuthor> followedAuthors = followedAuthorsRepository.findFollowedAuthorsByFollowerId(id);
+        for (FollowedAuthor followedAuthor : followedAuthors) {
+            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
+            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor);
+            followedAuthorsToReturn.add(followedAuthorDTOGetPostPut);
+        }
+        return followedAuthorsToReturn;
+    }
+
+    //This method returns an Optional of FollowedAuthorDTOGetPostPut. This returns the list of follows of an author
+    //Calls followedAuthorsRepository.findFollowedAuthorsByAuthorId() and uses a for cycle to iterate over the users and to add to the Arraylist to return
+    public List<FollowedAuthorDTOGetPostPut> findFollowedAuthorsByAuthorId(long id){
+        List<FollowedAuthorDTOGetPostPut> followedAuthorsToReturn = new ArrayList<>();
+        List<FollowedAuthor> followedAuthors = followedAuthorsRepository.findFollowedAuthorsByAuthorId(id);
+        for (FollowedAuthor followedAuthor : followedAuthors) {
+            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
+            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor);
+            followedAuthorsToReturn.add(followedAuthorDTOGetPostPut);
+        }
+        return followedAuthorsToReturn;
+    }
+
+    //This method returns an Optional of FollowedAuthorDTOGetPostPut
+    //First validates if the associated follower and author exist
+    //Creates a FollowedAuthor object, sets its attributes from FollowedAuthorDTO received as parameter and saves it by calling followedAuthorsRepository.save()
+    //Uses that FollowedAuthor as an assistant to save calling the repository save() function
+    //If the associated follower and author do not exist, returns an empty Optional
+    public Optional<FollowedAuthorDTOGetPostPut> saveFollowedAuthor(FollowedAuthorDTO followedAuthorDTO){
+        Optional<User> follower = userRepository.findById(followedAuthorDTO.getFollowerId());
+        Optional<User> author = userRepository.findById(followedAuthorDTO.getAuthorId());
+        if(follower.isPresent() && author.isPresent()){
+            FollowedAuthor followedAuthor = new FollowedAuthor();
+            followedAuthor.setFollower(follower.get());
+            followedAuthor.setAuthor(author.get());
+            followedAuthor.setCreationDate(LocalDateTime.now());
+            FollowedAuthorDTOGetPostPut savedFollowerAuthor = new FollowedAuthorDTOGetPostPut();
+            savedFollowerAuthor.convertToFollowedAuthorDTO(followedAuthorsRepository.save(followedAuthor));
+            return Optional.of(savedFollowerAuthor);
+        }else{
+            return Optional.empty();
+        }
+    }
+
+    //This method, validating the Optional in the if block, returns true if deletion was made or false if not
+    public boolean deleteFollowedAuthorById(long id){
+        if(followedAuthorsRepository.findById(id).isPresent()){
+            followedAuthorsRepository.deleteById(id);
             return true;
         }
         return false;

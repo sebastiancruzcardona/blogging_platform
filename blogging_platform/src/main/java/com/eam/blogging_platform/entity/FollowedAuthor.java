@@ -2,18 +2,18 @@ package com.eam.blogging_platform.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "followed_authors")
-public class FollowedAuthors {
+public class FollowedAuthor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "creation_date")
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "follower_id")
@@ -23,18 +23,18 @@ public class FollowedAuthors {
     @JoinColumn(name = "author_id")
     private User author;
 
-    public FollowedAuthors() {
+    public FollowedAuthor() {
         super();
     }
 
-    public FollowedAuthors(long id, LocalDate creationDate, User user, User author) {
+    public FollowedAuthor(long id, LocalDateTime creationDate, User user, User author) {
         this.id = id;
         this.creationDate = creationDate;
         this.follower = user;
         this.author = author;
     }
 
-    public FollowedAuthors(LocalDate creationDate, User user, User author) {
+    public FollowedAuthor(LocalDateTime creationDate, User user, User author) {
         this.creationDate = creationDate;
         this.follower = user;
         this.author = author;
@@ -44,11 +44,11 @@ public class FollowedAuthors {
         return id;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

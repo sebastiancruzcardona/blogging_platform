@@ -30,10 +30,10 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-    private List<FollowedAuthors> followers;
+    private List<FollowedAuthor> followers;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<FollowedAuthors> followed_authors; //is it possible to deleteById author or follower?
+    private List<FollowedAuthor> followed_authors; //is it possible to deleteById author or follower?
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -106,11 +106,11 @@ public class User {
         this.role = role;
     }
 
-    public List<FollowedAuthors> getFollowers() {
+    public List<FollowedAuthor> getFollowers() {
         return followers;
     }
 
-    public List<FollowedAuthors> getFollowed_authors() {
+    public List<FollowedAuthor> getFollowed_authors() {
         return followed_authors;
     }
 
