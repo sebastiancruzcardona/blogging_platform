@@ -9,11 +9,12 @@ public class UserDTO {
     private String username;
 
     @Email(message = "An email must be provided")
+    @NotBlank(message = "An email must be provided")
     private String email;
 
     @NotBlank(message = "A password must be provided")
-    @Size(min = 6, max = 40, message = "Not a valid name, 6 character as minimum, 40 as maximum")
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[@#$%^&+=!]).+$", message = "The string must contain at least one number and one special character")
+    //@Size(min = 6, max = 40, message = "Not a valid name, 6 character as minimum, 40 as maximum")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[@#$%^&+=!]).+$", message = "The password must contain at least one number and one special character")
     private String password;
 
     @Min(1)
