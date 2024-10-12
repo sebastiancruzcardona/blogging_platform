@@ -1,15 +1,21 @@
 package com.eam.blogging_platform.controller;
 
-import com.eam.blogging_platform.dto.FollowedAuthorDTO;
-import com.eam.blogging_platform.dto.FollowedAuthorDTOGetPostPut;
-import com.eam.blogging_platform.dto.UserDTO;
-import com.eam.blogging_platform.dto.UserDTOGetPostPut;
+import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.FollowedAuthor;
 import com.eam.blogging_platform.entity.User;
+import com.eam.blogging_platform.service.UserDetailsServiceImpl;
 import com.eam.blogging_platform.service.UserService;
+import com.eam.blogging_platform.util.JwtUtil;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +23,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired //Singleton backwards for just one UserService instance
-    private UserService userService;
+
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final JwtUtil jwtUtil;
 
     //This method refers to userService.findAll() method. Brings out every user stored in database's table user as a List of users
     @GetMapping
@@ -42,12 +52,30 @@ public class UserController {
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/register")
     //This method calls the save method from userService that needs an UserDTO object and returns an Optional
     //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
-    public ResponseEntity<UserDTOGetPostPut> createUser(@Valid @RequestBody UserDTO userDTO){
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO){
         Optional<UserDTOGetPostPut> userDTOGetPostPut = userService.save(userDTO);
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userLoginDTO.getUsername(), userLoginDTO.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401).body("Credenciales inválidas");
+        }
+
+        final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userLoginDTO.getUsername());
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(jwt);
     }
 
     @PutMapping("/{id}")
