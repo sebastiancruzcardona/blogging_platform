@@ -6,14 +6,10 @@ import com.eam.blogging_platform.entity.Category;
 
 public class CategoryDTOGetPostPut {
 
-    @Min(1)
     private long id;
 
-    @NotBlank(message = "A category must be provided")
-    @Size(min = 1, max = 60, message = "Not a valid category, 1 character as minimum, 60 as maximum")
     private String category;
 
-    @Size(max = 250, message = "Description must be up to 250 characters")
     private String description;
 
     private LocalDateTime creationDate;
