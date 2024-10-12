@@ -55,7 +55,7 @@ public class CategoryController {
      * @return ResponseEntity containing the updated CategoryDTOGetPostPut if successful, otherwise 404 Not Found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTOGetPostPut> updateCategory(@PathVariable long id, @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTOGetPostPut> updateCategory(@PathVariable long id, @Valid @RequestBody CategoryDTO categoryDTO) {
         Optional<CategoryDTOGetPostPut> updatedCategory = categoryService.updateCategory(id, categoryDTO);
         return updatedCategory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

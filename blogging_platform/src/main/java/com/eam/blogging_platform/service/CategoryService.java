@@ -54,7 +54,7 @@ public class CategoryService {
      * @param categoryDTO The category information to save.
      * @return Optional containing the saved CategoryDTOGetPostPut if successful.
      */
-    public Optional<CategoryDTOGetPostPut> saveCategory(@Valid CategoryDTO categoryDTO) {
+    public Optional<CategoryDTOGetPostPut> saveCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setCategory(categoryDTO.getCategory());
         category.setDescription(categoryDTO.getDescription());
