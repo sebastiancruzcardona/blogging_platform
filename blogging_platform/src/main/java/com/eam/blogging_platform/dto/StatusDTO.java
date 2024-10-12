@@ -4,8 +4,8 @@ import jakarta.validation.constraints.*;
 
 public class StatusDTO {
 
-    @NotBlank(message = "Debe ingresar un estado")
-    @Size(min = 1, max = 15, message = "El estado debe ser entre 1 y 15 caracteres")
+    @NotBlank(message = "A status must be provided")
+    @Size(min = 1, max = 15, message = "Not a valid status, 1 character as minimum, 15 as maximum")
     private String status;
 
     // Getters and Setters

@@ -8,8 +8,8 @@ public class StatusDTOGetPostPut {
     @Min(1)
     private long id;
 
-    @NotBlank(message = "Status must be provided")
-    @Size(min = 1, max = 15, message = "Status must be between 1 and 15 characters")
+    @NotBlank(message = "A status must be provided")
+    @Size(min = 1, max = 15, message = "Not a valid status, 1 character as minimum, 15 as maximum")
     private String status;
 
     // Getters and Setters
