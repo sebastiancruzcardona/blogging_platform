@@ -1,7 +1,8 @@
 package com.eam.blogging_platform.controller;
 
-import com.eam.blogging_platform.entity.Status;
+import com.eam.blogging_platform.dto.StatusDTOGetPostPut;
 import com.eam.blogging_platform.service.StatusService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,56 +10,62 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/status")
+@RequestMapping("/api/statuses")
 public class StatusController {
-
-    @Autowired // Singleton backwards for just one statusService instance
+    @Autowired
     private StatusService statusService;
 
-    // This method refers to statusService.findAll() method. Brings out every Status stored in the database table status
+    /**
+     * Retrieves all statuses from the database.
+     * @return List of StatusDTOGetPostPut representing all statuses.
+     */
     @GetMapping
-    public List<Status> getAllStatuses() {
-        return statusService.findAll();
+    public List<StatusDTOGetPostPut> getAllStatuses() {
+        return statusService.findAllStatuses();
     }
 
-    // This method refers to statusService.findById() method. Finds a specific Status searching by id
-    // If the Status is found, maps the ResponseEntity and returns a 200 OK Status.
-    // If there is not a Status identified by that id, returns 404 Not Found Status
+    /**
+     * Retrieves a specific status by its ID.
+     * @param id The ID of the status to retrieve.
+     * @return ResponseEntity containing the StatusDTOGetPostPut if found, otherwise 404 Not Found.
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<Status> getStatusById(@PathVariable long id) {
-        Optional<Status> status = statusService.findById(id);
-        return status.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<StatusDTOGetPostPut> getStatusById(@PathVariable long id) {
+        Optional<StatusDTOGetPostPut> statusDTO = statusService.findStatusById(id);
+        return statusDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // This method refers to statusService.save() method. Saves a new Status in the database table status
+    /**
+     * Creates a new status.
+     * @param statusDTO The status data to create.
+     * @return ResponseEntity containing the created StatusDTOGetPostPut if successful, otherwise 400 Bad Request.
+     */
     @PostMapping
-    public Status createStatus(@RequestBody Status status) {
-        return statusService.save(status);
+    public ResponseEntity<StatusDTOGetPostPut> createStatus(@Valid @RequestBody StatusDTOGetPostPut statusDTO) {
+        Optional<StatusDTOGetPostPut> savedStatus = statusService.saveStatus(statusDTO);
+        return savedStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    // This method refers to statusService.findById() and statusService.save() methods. Finds a specific Status by id and updates it
-    // If the Status is found, sets the attributes to the Status in edition, saves to update, and returns a 200 OK Status.
-    // If there is not a Status identified by that id, returns 404 Not Found Status
+    /**
+     * Updates an existing status by its ID.
+     * @param id The ID of the status to update.
+     * @param statusDTO The updated status data.
+     * @return ResponseEntity containing the updated StatusDTOGetPostPut if successful, otherwise 404 Not Found.
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<Status> updateStatus(@PathVariable long id, @RequestBody Status updatedStatusData) {
-        Optional<Status> status = statusService.findById(id);
-        if (status.isPresent()) {
-            Status updatedStatus = status.get();
-            updatedStatus.setStatus(updatedStatusData.getStatus());
-
-            return ResponseEntity.ok(statusService.save(updatedStatus));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<StatusDTOGetPostPut> updateStatus(@PathVariable long id, @Valid @RequestBody StatusDTOGetPostPut statusDTO) {
+        Optional<StatusDTOGetPostPut> updatedStatus = statusService.updateStatus(id, statusDTO);
+        return updatedStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // This method refers to statusService.findById() and statusService.deleteById() methods. Finds a specific Status by id and deletes it
-    // If the Status is found, deletes it.
-    // If there is not a Status identified by that id, returns 404 Not Found Status
+    /**
+     * Deletes a specific status by its ID.
+     * @param id The ID of the status to delete.
+     * @return ResponseEntity with status 200 OK if deleted, otherwise 404 Not Found.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStatus(@PathVariable long id) {
-        if (statusService.findById(id).isPresent()) {
-            statusService.deleteById(id);
+        if (statusService.deleteStatusById(id)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
