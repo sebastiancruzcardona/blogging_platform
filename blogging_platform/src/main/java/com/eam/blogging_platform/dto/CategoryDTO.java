@@ -8,11 +8,11 @@ public class CategoryDTO {
     @Min(1)
     private long id;
 
-    @NotBlank(message = "Category must be provided")
-    @Size(min = 1, max = 60, message = "Category must be between 1 and 60 characters")
+    @NotBlank(message = "Debe ingresar una categoria")
+    @Size(min = 1, max = 60, message = "La categoria debe ser entre 1 y 60 caracteres")
     private String category;
 
-    @Size(max = 250, message = "Description must be up to 250 characters")
+    @Size(max = 250, message = "La descripción debe ser menor a 250 caracteres")
     private String description;
 
     private LocalDateTime creationDate;
