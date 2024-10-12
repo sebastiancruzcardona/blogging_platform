@@ -1,7 +1,9 @@
 package com.eam.blogging_platform.controller;
 
+import com.eam.blogging_platform.dto.CategoriesPostDTOGetPostPut;
 import com.eam.blogging_platform.entity.CategoriesPost;
 import com.eam.blogging_platform.service.CategoriesPostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,57 +11,50 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/categories_posts")
+@RequestMapping("/api/categoriesPosts")
 public class CategoriesPostController {
-
-    @Autowired // Singleton backwards for just one categoriesPostService instance
+    @Autowired
     private CategoriesPostService categoriesPostService;
 
-    // This method refers to categoriesPostService.findAll() method. Brings out every CategoriesPost stored in the database table categories_post
+    /**
+     * Retrieves all categories-post relationships from the database.
+     * @return List of CategoriesPostDTOGetPostPut representing all categories-post relationships.
+     */
     @GetMapping
-    public List<CategoriesPost> getAllCategoriesPosts() {
-        return categoriesPostService.findAll();
+    public List<CategoriesPostDTOGetPostPut> getAllCategoriesPosts() {
+        return categoriesPostService.findAllCategoriesPosts();
     }
 
-    // This method refers to categoriesPostService.findById() method. Finds a specific CategoriesPost searching by id
-    // If the CategoriesPost is found, maps the ResponseEntity and returns a 200 OK Status.
-    // If there is not a CategoriesPost identified by that id, returns 404 Not Found Status
+    /**
+     * Retrieves a specific categories-post relationship by its ID.
+     * @param id The ID of the categories-post relationship to retrieve.
+     * @return ResponseEntity containing the CategoriesPostDTOGetPostPut if found, otherwise 404 Not Found.
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriesPost> getCategoriesPostById(@PathVariable long id) {
-        Optional<CategoriesPost> categoriesPost = categoriesPostService.findById(id);
-        return categoriesPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<CategoriesPostDTOGetPostPut> getCategoriesPostById(@PathVariable long id) {
+        Optional<CategoriesPostDTOGetPostPut> categoriesPostDTO = categoriesPostService.findCategoriesPostById(id);
+        return categoriesPostDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // This method refers to categoriesPostService.save() method. Saves a new CategoriesPost in the database table categories_post
+    /**
+     * Creates a new categories-post relationship.
+     * @param categoriesPostDTO The categories-post data to create.
+     * @return ResponseEntity containing the created CategoriesPostDTOGetPostPut if successful, otherwise 400 Bad Request.
+     */
     @PostMapping
-    public CategoriesPost createCategoriesPost(@RequestBody CategoriesPost categoriesPost) {
-        return categoriesPostService.save(categoriesPost);
+    public ResponseEntity<CategoriesPostDTOGetPostPut> createCategoriesPost(@Valid @RequestBody CategoriesPostDTOGetPostPut categoriesPostDTO) {
+        Optional<CategoriesPostDTOGetPostPut> savedCategoriesPost = categoriesPostService.saveCategoriesPost(categoriesPostDTO);
+        return savedCategoriesPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    // This method refers to categoriesPostService.findById() and categoriesPostService.save() methods. Finds a specific CategoriesPost by id and updates it
-    // If the CategoriesPost is found, sets the attributes to the CategoriesPost in edition, saves to update, and returns a 200 OK Status.
-    // If there is not a CategoriesPost identified by that id, returns 404 Not Found Status
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoriesPost> updateCategoriesPost(@PathVariable long id, @RequestBody CategoriesPost updatedCategoriesPostData) {
-        Optional<CategoriesPost> categoriesPost = categoriesPostService.findById(id);
-        if (categoriesPost.isPresent()) {
-            CategoriesPost updatedCategoriesPost = categoriesPost.get();
-            updatedCategoriesPost.setPost(updatedCategoriesPostData.getPost());
-            updatedCategoriesPost.setCategory(updatedCategoriesPostData.getCategory());
-
-            return ResponseEntity.ok(categoriesPostService.save(updatedCategoriesPost));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    // This method refers to categoriesPostService.findById() and categoriesPostService.deleteById() methods. Finds a specific CategoriesPost by id and deletes it
-    // If the CategoriesPost is found, deletes it.
-    // If there is not a CategoriesPost identified by that id, returns 404 Not Found Status
+    /**
+     * Deletes a specific categories-post relationship by its ID.
+     * @param id The ID of the categories-post relationship to delete.
+     * @return ResponseEntity with status 200 OK if deleted, otherwise 404 Not Found.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoriesPost(@PathVariable long id) {
-        if (categoriesPostService.findById(id).isPresent()) {
-            categoriesPostService.deleteById(id);
+        if (categoriesPostService.deleteCategoriesPostById(id)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
