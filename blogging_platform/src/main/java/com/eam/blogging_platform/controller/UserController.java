@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -69,7 +69,7 @@ public class UserController {
                     )
             );
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Credenciales inválidas");
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
 
         final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userLoginDTO.getUsername());
