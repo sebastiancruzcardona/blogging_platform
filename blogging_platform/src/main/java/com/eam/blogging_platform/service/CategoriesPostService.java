@@ -54,7 +54,7 @@ public class CategoriesPostService {
      * @param categoriesPostDTO The categories-post information to save.
      * @return Optional containing the saved CategoriesPostDTOGetPostPut if successful.
      */
-    public Optional<CategoriesPostDTOGetPostPut> saveCategoriesPost(@Valid CategoriesPostDTO categoriesPostDTO) {
+    public Optional<CategoriesPostDTOGetPostPut> saveCategoriesPost(CategoriesPostDTO categoriesPostDTO) {
         CategoriesPost categoriesPost = new CategoriesPost();
         categoriesPost.setPost(new Post()); // Replace with actual Post retrieval logic
         categoriesPost.setCategory(new Category()); // Replace with actual Category retrieval logic
