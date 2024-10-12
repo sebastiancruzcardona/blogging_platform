@@ -12,6 +12,7 @@ import com.eam.blogging_platform.repository.RoleRepository;
 import com.eam.blogging_platform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -30,6 +31,9 @@ public class UserService {
 
     @Autowired
     private FollowedAuthorsRepository followedAuthorsRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; //Encrypter
 
     //This method finds all users stored in database and returns a list of UserDTOGetPostPut
     //Calls userRepository.findAll() and uses a for cycle to iterate over the users and to add to the Arraylist to return
@@ -67,7 +71,7 @@ public class UserService {
             User user = new User();
             user.setUsername(userDTO.getUsername());
             user.setEmail(userDTO.getEmail());
-            user.setPassword(userDTO.getPassword());
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword())); //Encrypt password
             user.setCreationDate(LocalDateTime.now());
             user.setRole(role.get());
             UserDTOGetPostPut savedUser = new UserDTOGetPostPut();
