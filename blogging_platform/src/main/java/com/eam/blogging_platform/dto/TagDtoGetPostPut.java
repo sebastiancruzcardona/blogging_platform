@@ -1,16 +1,15 @@
 package com.eam.blogging_platform.dto;
 
-
 import com.eam.blogging_platform.entity.Tag;
 
+import java.time.LocalDateTime;
 
-import java.util.Date;
 
 public class TagDtoGetPostPut {
 
     private Long id;
     private String tag;
-    private Date creation_date;
+    private LocalDateTime creation_date;
 
     public Long getId() {
         return id;
@@ -28,11 +27,11 @@ public class TagDtoGetPostPut {
         this.tag = tag;
     }
 
-    public Date getCreation_date() {
+    public LocalDateTime getCreation_date() {
         return creation_date;
     }
 
-    public void setCreation_date(Date creation_date) {
+    public void setCreation_date(LocalDateTime creation_date) {
         this.creation_date = creation_date;
     }
 

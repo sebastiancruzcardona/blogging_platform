@@ -47,7 +47,7 @@ public class FollowedAuthorDTOGetPostPut {
     }
 
     //This method receives a FollowedAuthor and sets its attributes to the FollowedAuthorDTOGetPostPut object
-    public void convertToTagPostDTO(FollowedAuthor followedAuthor) {
+    public void convertToFollowedAuthorDTO(FollowedAuthor followedAuthor) {
         this.setId(followedAuthor.getId());
         this.setCreationDate(followedAuthor.getCreationDate());
         this.setAuthorId(followedAuthor.getAuthor().getId());

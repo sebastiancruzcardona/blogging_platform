@@ -55,7 +55,7 @@ public class Tag {
         this.tag = tag;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
