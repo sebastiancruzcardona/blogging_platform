@@ -54,7 +54,7 @@ public class StatusController {
      * @return ResponseEntity containing the updated StatusDTOGetPostPut if successful, otherwise 404 Not Found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<StatusDTOGetPostPut> updateStatus(@PathVariable long id, @RequestBody StatusDTO statusDTO) {
+    public ResponseEntity<StatusDTOGetPostPut> updateStatus(@PathVariable long id, @Valid @RequestBody StatusDTO statusDTO) {
         Optional<StatusDTOGetPostPut> updatedStatus = statusService.updateStatus(id, statusDTO);
         return updatedStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

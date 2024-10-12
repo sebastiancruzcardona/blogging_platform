@@ -52,7 +52,7 @@ public class StatusService {
      * @param statusDTO The status information to save.
      * @return Optional containing the saved StatusDTOGetPostPut if successful.
      */
-    public Optional<StatusDTOGetPostPut> saveStatus(@Valid StatusDTO statusDTO) {
+    public Optional<StatusDTOGetPostPut> saveStatus(StatusDTO statusDTO) {
         Status status = new Status();
         status.setStatus(statusDTO.getStatus());
         Status savedStatus = statusRepository.save(status);
