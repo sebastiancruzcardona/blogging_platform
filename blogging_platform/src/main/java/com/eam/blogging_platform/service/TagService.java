@@ -48,6 +48,7 @@ public class TagService {
     public TagDtoGetPostPut save(TagDto tagDto) {
         Tag tag = new Tag();
         tag.setTag(tagDto.getTag());
+        tag.setCreationDate(LocalDateTime.now());
         TagDtoGetPostPut tagDtoGetPostPut = new TagDtoGetPostPut();
         tagDtoGetPostPut.convertToTagDTO(tagRepository.save(tag));
         return tagDtoGetPostPut;
