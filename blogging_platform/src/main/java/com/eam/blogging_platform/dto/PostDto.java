@@ -22,19 +22,10 @@ public class PostDto {
     @Min(value = 1, message = "Status ID must be greater than or equal to 1")
     private Long statusId;
 
-    @Min(value = 0, message = "Likes cannot be negative")
-    private int likes;
-
-    @Min(value = 0, message = "Dislikes cannot be negative")
-    private int dislikes;
-
-    @PastOrPresent(message = "Creation date cannot be in the future")
     private LocalDateTime creationDate;
 
-    @PastOrPresent(message = "Last update date cannot be in the future")
     private LocalDateTime lastUpdateDate;
 
-    @FutureOrPresent(message = "Publication date cannot be in the past")
     private LocalDateTime publicationDate;
 
     // Getters and Setters
@@ -69,22 +60,6 @@ public class PostDto {
 
     public void setStatusId(Long statusId) {
         this.statusId = statusId;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getDislikes() {
-        return dislikes;
-    }
-
-    public void setDislikes(int dislikes) {
-        this.dislikes = dislikes;
     }
 
     public LocalDateTime getCreationDate() {
