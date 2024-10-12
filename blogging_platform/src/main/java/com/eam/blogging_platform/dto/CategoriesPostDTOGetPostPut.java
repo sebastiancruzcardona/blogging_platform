@@ -5,13 +5,10 @@ import jakarta.validation.constraints.*;
 
 public class CategoriesPostDTOGetPostPut {
 
-    @Min(1)
     private long id;
 
-    @Min(1)
     private long postId;
 
-    @Min(1)
     private long categoryId;
 
     // Getters and Setters
