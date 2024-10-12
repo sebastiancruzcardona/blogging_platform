@@ -5,9 +5,6 @@ import java.time.LocalDateTime;
 
 public class CategoryDTO {
 
-    @Min(1)
-    private long id;
-
     @NotBlank(message = "Debe ingresar una categoria")
     @Size(min = 1, max = 60, message = "La categoria debe ser entre 1 y 60 caracteres")
     private String category;
@@ -18,13 +15,6 @@ public class CategoryDTO {
     private LocalDateTime creationDate;
 
     // Getters and Setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getCategory() {
         return category;

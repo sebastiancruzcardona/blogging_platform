@@ -12,13 +12,6 @@ public class StatusDTO {
     private String status;
 
     // Getters and Setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getStatus() {
         return status;

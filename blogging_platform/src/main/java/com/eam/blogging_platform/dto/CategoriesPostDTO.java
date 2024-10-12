@@ -5,22 +5,12 @@ import jakarta.validation.constraints.*;
 public class CategoriesPostDTO {
 
     @Min(1)
-    private long id;
-
-    @Min(1)
     private long postId;
 
     @Min(1)
     private long categoryId;
 
     // Getters and Setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public long getPostId() {
         return postId;
