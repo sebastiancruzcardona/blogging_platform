@@ -2,7 +2,7 @@ package com.eam.blogging_platform.dto;
 
 
 import com.eam.blogging_platform.entity.Tag;
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 import java.util.Date;
 
@@ -36,13 +36,11 @@ public class TagDtoGetPostPut {
         this.creation_date = creation_date;
     }
 
-    //This method receives a Tag and sets its attributes to the TagDTOGetPuTPost objectpublic void convertToTagDTO(Tag tag) {
+    //This method receives a Tag and sets its attributes to the TagDTOGetPuTPost objectPublic void convertToTagDTO(Tag tag) {
     public void convertToTagDTO(Tag tag) {
         this.setId(tag.getId());
+        this.setTag(tag.getTag());
         this.setCreation_date(tag.getCreationDate());
-
-
-
     }
 
 }
