@@ -5,13 +5,10 @@ import jakarta.validation.constraints.*;
 public class CategoriesPostDTO {
 
     @Min(1)
-    private long categoryId;
+    private Long categoryId;
 
     @Min(1)
-    private long postId;
-
-    @NotNull
-    private String relationshipType;
+    private Long postId;
 
     // Getters and Setters
 
@@ -29,13 +26,5 @@ public class CategoriesPostDTO {
 
     public void setPostId(long postId) {
         this.postId = postId;
-    }
-
-    public String getRelationshipType() {
-        return relationshipType;
-    }
-
-    public void setRelationshipType(String relationshipType) {
-        this.relationshipType = relationshipType;
     }
 }

@@ -41,10 +41,10 @@ public class CategoriesPostController {
      * @param categoriesPostDTO The categories-post data to create.
      * @return ResponseEntity containing the created CategoriesPostDTOGetPostPut if successful, otherwise 400 Bad Request.
      */
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<CategoriesPostDTOGetPostPut> createCategoriesPost(@Valid @RequestBody CategoriesPostDTO categoriesPostDTO) {
         Optional<CategoriesPostDTOGetPostPut> savedCategoriesPost = categoriesPostService.saveCategoriesPost(categoriesPostDTO);
-        return savedCategoriesPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        return savedCategoriesPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**

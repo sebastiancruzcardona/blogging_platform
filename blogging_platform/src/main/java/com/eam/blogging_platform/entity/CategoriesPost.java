@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class CategoriesPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -21,13 +21,13 @@ public class CategoriesPost {
         super();
     }
 
-    public CategoriesPost(long id, Post post, Category category) {
+    public CategoriesPost(Long id, Post post, Category category) {
         this.id = id;
         this.post = post;
         this.category = category;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

@@ -5,11 +5,11 @@ import jakarta.validation.constraints.*;
 
 public class CategoriesPostDTOGetPostPut {
 
-    private long id;
+    private Long id;
 
-    private long postId;
+    private Long postId;
 
-    private long categoryId;
+    private Long categoryId;
 
     // Getters and Setters
     public long getId() {
