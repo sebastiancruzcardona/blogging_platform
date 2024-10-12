@@ -2,7 +2,6 @@ package com.eam.blogging_platform.controller;
 
 import com.eam.blogging_platform.dto.CategoryDTO;
 import com.eam.blogging_platform.dto.CategoryDTOGetPostPut;
-import com.eam.blogging_platform.entity.Category;
 import com.eam.blogging_platform.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
