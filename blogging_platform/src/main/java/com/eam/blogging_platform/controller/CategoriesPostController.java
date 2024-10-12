@@ -1,5 +1,6 @@
 package com.eam.blogging_platform.controller;
 
+import com.eam.blogging_platform.dto.CategoriesPostDTO;
 import com.eam.blogging_platform.dto.CategoriesPostDTOGetPostPut;
 import com.eam.blogging_platform.entity.CategoriesPost;
 import com.eam.blogging_platform.service.CategoriesPostService;
@@ -42,7 +43,7 @@ public class CategoriesPostController {
      * @return ResponseEntity containing the created CategoriesPostDTOGetPostPut if successful, otherwise 400 Bad Request.
      */
     @PostMapping
-    public ResponseEntity<CategoriesPostDTOGetPostPut> createCategoriesPost(@Valid @RequestBody CategoriesPostDTOGetPostPut categoriesPostDTO) {
+    public ResponseEntity<CategoriesPostDTOGetPostPut> createCategoriesPost(@Valid @RequestBody CategoriesPostDTO categoriesPostDTO) {
         Optional<CategoriesPostDTOGetPostPut> savedCategoriesPost = categoriesPostService.saveCategoriesPost(categoriesPostDTO);
         return savedCategoriesPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }

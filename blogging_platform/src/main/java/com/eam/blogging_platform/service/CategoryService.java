@@ -1,8 +1,10 @@
 package com.eam.blogging_platform.service;
 
+import com.eam.blogging_platform.dto.CategoryDTO;
 import com.eam.blogging_platform.dto.CategoryDTOGetPostPut;
 import com.eam.blogging_platform.entity.Category;
 import com.eam.blogging_platform.repository.CategoryRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +54,7 @@ public class CategoryService {
      * @param categoryDTO The category information to save.
      * @return Optional containing the saved CategoryDTOGetPostPut if successful.
      */
-    public Optional<CategoryDTOGetPostPut> saveCategory(CategoryDTOGetPostPut categoryDTO) {
+    public Optional<CategoryDTOGetPostPut> saveCategory(@Valid CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setCategory(categoryDTO.getCategory());
         category.setDescription(categoryDTO.getDescription());
@@ -68,7 +70,7 @@ public class CategoryService {
      * @param categoryDTO The updated category information.
      * @return Optional containing the updated CategoryDTOGetPostPut if successful.
      */
-    public Optional<CategoryDTOGetPostPut> updateCategory(long id, CategoryDTOGetPostPut categoryDTO) {
+    public Optional<CategoryDTOGetPostPut> updateCategory(long id, CategoryDTO categoryDTO) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             Category categoryToUpdate = category.get();

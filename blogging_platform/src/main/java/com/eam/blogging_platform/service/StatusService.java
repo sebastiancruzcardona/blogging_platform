@@ -3,6 +3,7 @@ package com.eam.blogging_platform.service;
 import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.*;
 import com.eam.blogging_platform.repository.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,7 @@ public class StatusService {
      * @param statusDTO The status information to save.
      * @return Optional containing the saved StatusDTOGetPostPut if successful.
      */
-    public Optional<StatusDTOGetPostPut> saveStatus(StatusDTOGetPostPut statusDTO) {
+    public Optional<StatusDTOGetPostPut> saveStatus(@Valid StatusDTO statusDTO) {
         Status status = new Status();
         status.setStatus(statusDTO.getStatus());
         Status savedStatus = statusRepository.save(status);
@@ -66,7 +67,7 @@ public class StatusService {
      * @param statusDTO The updated status information.
      * @return Optional containing the updated StatusDTOGetPostPut if successful.
      */
-    public Optional<StatusDTOGetPostPut> updateStatus(long id, StatusDTOGetPostPut statusDTO) {
+    public Optional<StatusDTOGetPostPut> updateStatus(long id, StatusDTO statusDTO) {
         Optional<Status> status = statusRepository.findById(id);
         if (status.isPresent()) {
             Status statusToUpdate = status.get();

@@ -1,5 +1,6 @@
 package com.eam.blogging_platform.controller;
 
+import com.eam.blogging_platform.dto.CategoryDTO;
 import com.eam.blogging_platform.dto.CategoryDTOGetPostPut;
 import com.eam.blogging_platform.entity.Category;
 import com.eam.blogging_platform.service.CategoryService;
@@ -43,7 +44,7 @@ public class CategoryController {
      * @return ResponseEntity containing the created CategoryDTOGetPostPut if successful, otherwise 400 Bad Request.
      */
     @PostMapping
-    public ResponseEntity<CategoryDTOGetPostPut> createCategory(@Valid @RequestBody CategoryDTOGetPostPut categoryDTO) {
+    public ResponseEntity<CategoryDTOGetPostPut> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         Optional<CategoryDTOGetPostPut> savedCategory = categoryService.saveCategory(categoryDTO);
         return savedCategory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
@@ -55,7 +56,7 @@ public class CategoryController {
      * @return ResponseEntity containing the updated CategoryDTOGetPostPut if successful, otherwise 404 Not Found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTOGetPostPut> updateCategory(@PathVariable long id, @Valid @RequestBody CategoryDTOGetPostPut categoryDTO) {
+    public ResponseEntity<CategoryDTOGetPostPut> updateCategory(@PathVariable long id, @RequestBody CategoryDTO categoryDTO) {
         Optional<CategoryDTOGetPostPut> updatedCategory = categoryService.updateCategory(id, categoryDTO);
         return updatedCategory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

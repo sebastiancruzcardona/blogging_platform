@@ -1,5 +1,6 @@
 package com.eam.blogging_platform.controller;
 
+import com.eam.blogging_platform.dto.StatusDTO;
 import com.eam.blogging_platform.dto.StatusDTOGetPostPut;
 import com.eam.blogging_platform.service.StatusService;
 import jakarta.validation.Valid;
@@ -41,7 +42,7 @@ public class StatusController {
      * @return ResponseEntity containing the created StatusDTOGetPostPut if successful, otherwise 400 Bad Request.
      */
     @PostMapping
-    public ResponseEntity<StatusDTOGetPostPut> createStatus(@Valid @RequestBody StatusDTOGetPostPut statusDTO) {
+    public ResponseEntity<StatusDTOGetPostPut> createStatus(@Valid @RequestBody StatusDTO statusDTO) {
         Optional<StatusDTOGetPostPut> savedStatus = statusService.saveStatus(statusDTO);
         return savedStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
@@ -53,7 +54,7 @@ public class StatusController {
      * @return ResponseEntity containing the updated StatusDTOGetPostPut if successful, otherwise 404 Not Found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<StatusDTOGetPostPut> updateStatus(@PathVariable long id, @Valid @RequestBody StatusDTOGetPostPut statusDTO) {
+    public ResponseEntity<StatusDTOGetPostPut> updateStatus(@PathVariable long id, @RequestBody StatusDTO statusDTO) {
         Optional<StatusDTOGetPostPut> updatedStatus = statusService.updateStatus(id, statusDTO);
         return updatedStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -72,4 +73,5 @@ public class StatusController {
         }
     }
 }
+
 

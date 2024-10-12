@@ -4,9 +4,6 @@ import jakarta.validation.constraints.*;
 
 public class StatusDTO {
 
-    @Min(1)
-    private long id;
-
     @NotBlank(message = "Debe ingresar un estado")
     @Size(min = 1, max = 15, message = "El estado debe ser entre 1 y 15 caracteres")
     private String status;

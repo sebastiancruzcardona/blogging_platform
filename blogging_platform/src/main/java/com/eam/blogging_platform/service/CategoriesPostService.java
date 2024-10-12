@@ -1,10 +1,12 @@
 package com.eam.blogging_platform.service;
 
+import com.eam.blogging_platform.dto.CategoriesPostDTO;
 import com.eam.blogging_platform.dto.CategoriesPostDTOGetPostPut;
 import com.eam.blogging_platform.entity.CategoriesPost;
 import com.eam.blogging_platform.entity.Category;
 import com.eam.blogging_platform.entity.Post;
 import com.eam.blogging_platform.repository.CategoriesPostRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +54,7 @@ public class CategoriesPostService {
      * @param categoriesPostDTO The categories-post information to save.
      * @return Optional containing the saved CategoriesPostDTOGetPostPut if successful.
      */
-    public Optional<CategoriesPostDTOGetPostPut> saveCategoriesPost(CategoriesPostDTOGetPostPut categoriesPostDTO) {
+    public Optional<CategoriesPostDTOGetPostPut> saveCategoriesPost(@Valid CategoriesPostDTO categoriesPostDTO) {
         CategoriesPost categoriesPost = new CategoriesPost();
         categoriesPost.setPost(new Post()); // Replace with actual Post retrieval logic
         categoriesPost.setCategory(new Category()); // Replace with actual Category retrieval logic
