@@ -1,10 +1,9 @@
 package com.eam.blogging_platform.service;
 
 import com.eam.blogging_platform.dto.*;
-import com.eam.blogging_platform.entity.FollowedAuthor;
-import com.eam.blogging_platform.entity.Role;
-import com.eam.blogging_platform.entity.TagsPost;
-import com.eam.blogging_platform.entity.User;
+import com.eam.blogging_platform.entity.*;
+import com.eam.blogging_platform.repository.PostRepository;
+import com.eam.blogging_platform.repository.TagRepository;
 import com.eam.blogging_platform.repository.TagsPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,160 +17,76 @@ import java.util.Optional;
 public class TagsPostService {
     @Autowired //Singleton backwards for just one TagsPostRepository instance
     private TagsPostRepository tagsPostRepository;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private TagRepository tagRepository;
 
-    //This method finds all users stored in database and returns a list of UserDTOGetPostPut
-    //Calls userRepository.findAll() and uses a for cycle to iterate over the users and to add to the Arraylist to return
-    public List<UserDTOGetPostPut> findAll(){
-        List<Tag_PostDtoGetPostPut> usersToReturn = new ArrayList<>();
+    //This method finds all users stored in database and returns a list of Tag_PostDtoGetPostPut
+    //Calls tagsPostRepository.findAll() and uses a for cycle to iterate over the users and to add to the Arraylist to return
+    public List<Tag_PostDtoGetPostPut> findAll(){
+        List<Tag_PostDtoGetPostPut> tag_postToReturn = new ArrayList<>();
         List<TagsPost> tagsPost = tagsPostRepository.findAll();
-        for (TagsPost tagsPost : tagsPost) {
+        for (TagsPost tag_post : tagsPost) {
             Tag_PostDtoGetPostPut tagDtoGetPostPut = new Tag_PostDtoGetPostPut();
-            tagDtoGetPostPut.convertToTagPostDTO(tagsPost);
-            tagPostToReturn.add(tagDtoGetPostPut);
+            tagDtoGetPostPut.convertToTagPostDTO(tag_post);
+            tag_postToReturn.add(tagDtoGetPostPut);
         }
-        return tagsPostToReturn;
+        return tag_postToReturn;
     }
 
-    //This method returns an Optional of UserDTOGetPostPut
+    //This method returns an Optional of Tag_PostDtoGetPostPut
     //Using id, if the searched user exist, returns the optional, if not, returns an empty Optional
-    public Optional<UserDTOGetPostPut> findById(long id){
-        Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()){
-            UserDTOGetPostPut userDTOGetPostPut = new UserDTOGetPostPut();
-            userDTOGetPostPut.convertToUserDTO(user.get());
-            return Optional.of(userDTOGetPostPut);
+    public Optional<Tag_PostDtoGetPostPut> findById(long id){
+        Optional<TagsPost> tag_post = tagsPostRepository.findById(id);
+        if(tag_post.isPresent()){
+            Tag_PostDtoGetPostPut tag_postDtoGetPostPut = new Tag_PostDtoGetPostPut();
+            tag_postDtoGetPostPut.convertToTagPostDTO(tag_post.get());
+            return Optional.of(tag_postDtoGetPostPut);
         }
         return Optional.empty();
     }
 
-    //This method returns an Optional of UserDTOGetPostPut
-    //First validates if the associated role exist
-    //Creates a User object, sets its attributes from UserDTO received as parameter and saves it by calling userRepository.save()
-    //Uses that User as an assistant to save calling the repository save() function
-    //If the associated role does not exist returns an empty Optional
-    public Optional<UserDTOGetPostPut> save(UserDTO userDTO){
-        Optional<Role> role = roleRepository.findById(userDTO.getRoleID());
-        if(role.isPresent()){
-            User user = new User();
-            user.setUsername(userDTO.getUsername());
-            user.setEmail(userDTO.getEmail());
-            user.setPassword(userDTO.getPassword());
-            user.setCreationDate(LocalDateTime.now());
-            user.setRole(role.get());
-            UserDTOGetPostPut savedUser = new UserDTOGetPostPut();
-            savedUser.convertToUserDTO(userRepository.save(user));
-            return Optional.of(savedUser);
+    //This method returns an Optional of Tag_PostDtoGetPostPut
+    //First validates if the associated tag_post exist
+    //Creates a User object, sets its attributes from Tag_PostDto received as parameter and saves it by calling tagsPostRepository.save()
+    //Uses that TagsPost as an assistant to save calling the repository save() function
+    //If the associated tag_post does not exist returns an empty Optional
+    public Optional<Tag_PostDtoGetPostPut> save(Tag_PostDto tag_postDto){
+        Optional<TagsPost> tag_Post = tagsPostRepository.findById(tag_postDto.getPostId());
+        if(tag_Post.isPresent()){
+            TagsPost tag_post = new TagsPost();
+            tag_post.setTag(tag_post.getTag());
+            Tag_PostDtoGetPostPut savedTag_Post = new Tag_PostDtoGetPostPut();
+            savedTag_Post.convertToTagPostDTO(tagsPostRepository.save(tag_post));
+            return Optional.of(savedTag_Post);
         }else{
             return Optional.empty();
         }
     }
 
-    //This method returns an Optional of UserDTOGetPostPut that can be present or empty.
-    //First, it tries to find the user by id and the role by id, then, if the Optionals user and role are present, sets the attributes and returns an Optional
-    //If there is not a user identified by that id, and/or the role does not exist, returns an empty optional
-    public Optional<UserDTOGetPostPut> update(long id, UserDTO userDTO){
-        Optional<User> user = userRepository.findById(id);
-        Optional<Role> role = roleRepository.findById(userDTO.getRoleID());
-        if(user.isPresent() && role.isPresent()){
-            User userUpdate = user.get();
-            userUpdate.setUsername(userDTO.getUsername());
-            userUpdate.setEmail(userDTO.getEmail());
-            userUpdate.setPassword(userDTO.getPassword());
-            userUpdate.setRole(role.get());
-            UserDTOGetPostPut userDTOGetPostPut = new UserDTOGetPostPut();
-            userDTOGetPostPut.convertToUserDTO(userUpdate);
-            return Optional.of(userDTOGetPostPut);
+    //This method returns an Optional of Tag_PostDtoGetPostPut that can be present or empty.
+    //First, it tries to find the tag_post by id and the tag, post by id, then, if the Optionals tag_post , tag and post are present, sets the attributes and returns an Optional
+    //If there is not a tag_post identified by that id, and/or the tag, post does not exist, returns an empty optional
+    public Optional<Tag_PostDtoGetPostPut> update(long id, Tag_PostDto tag_PostDto){
+        Optional<TagsPost> tag_post = tagsPostRepository.findById(id);
+        Optional<Post> post = postRepository.findById(tag_PostDto.getPostId());
+        Optional<Tag> tag = tagRepository.findById(tag_PostDto.getTagId());
+        if(tag_post.isPresent() && post.isPresent() && tag.isPresent()){
+            TagsPost tag_postUpdate = tag_post.get();
+            tag_postUpdate.setPost(post.get());
+            tag_postUpdate.setTag(tag.get());
+            Tag_PostDtoGetPostPut tag_postDtoGetPostPut = new Tag_PostDtoGetPostPut();
+            tag_postDtoGetPostPut.convertToTagPostDTO(tag_postUpdate);
+            return Optional.of(tag_postDtoGetPostPut);
         }
         return Optional.empty();
     }
 
     //This method, validating the Optional in the if block, returns true if deletion was made or false if not
     public boolean deleteById(long id){
-        if(userRepository.findById(id).isPresent()){
-            userRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    //FollowedAuthor methods
-
-    //This method finds all FollowedAuthors stored in database and returns a list of FollowedAuthorDTOGetPostPut
-    //Calls userRepository.findAll() and uses a for cycle to iterate over the users and to add to the Arraylist to return
-    public List<FollowedAuthorDTOGetPostPut> findAllFollowedAuthors(){
-        List<FollowedAuthorDTOGetPostPut> followedAuthorsToReturn = new ArrayList<>();
-        List<FollowedAuthor> followedAuthors = followedAuthorsRepository.findAll();
-        for (FollowedAuthor followedAuthor : followedAuthors) {
-            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
-            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor);
-            followedAuthorsToReturn.add(followedAuthorDTOGetPostPut);
-        }
-        return followedAuthorsToReturn;
-    }
-
-    //This method returns an Optional of FollowedAuthorDTOGetPostPut
-    //Using id, if the searched user exist, returns the optional, if not, returns an empty Optional
-    public Optional<FollowedAuthorDTOGetPostPut> findFollowedAuthorById(long id){
-        Optional<FollowedAuthor> followedAuthor = followedAuthorsRepository.findById(id);
-        if(followedAuthor.isPresent()){
-            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
-            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor.get());
-            return Optional.of(followedAuthorDTOGetPostPut);
-        }
-        return Optional.empty();
-    }
-
-    //This method returns an Optional of FollowedAuthorDTOGetPostPut. This returns the list of follows of a follower
-    //Calls followedAuthorsRepository.findFollowedAuthorsByFollowerId() and uses a for cycle to iterate over the users and to add to the Arraylist to return
-    public List<FollowedAuthorDTOGetPostPut> findFollowedAuthorsByFollowerId(long id){
-        List<FollowedAuthorDTOGetPostPut> followedAuthorsToReturn = new ArrayList<>();
-        List<FollowedAuthor> followedAuthors = followedAuthorsRepository.findFollowedAuthorsByFollowerId(id);
-        for (FollowedAuthor followedAuthor : followedAuthors) {
-            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
-            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor);
-            followedAuthorsToReturn.add(followedAuthorDTOGetPostPut);
-        }
-        return followedAuthorsToReturn;
-    }
-
-    //This method returns an Optional of FollowedAuthorDTOGetPostPut. This returns the list of follows of an author
-    //Calls followedAuthorsRepository.findFollowedAuthorsByAuthorId() and uses a for cycle to iterate over the users and to add to the Arraylist to return
-    public List<FollowedAuthorDTOGetPostPut> findFollowedAuthorsByAuthorId(long id){
-        List<FollowedAuthorDTOGetPostPut> followedAuthorsToReturn = new ArrayList<>();
-        List<FollowedAuthor> followedAuthors = followedAuthorsRepository.findFollowedAuthorsByAuthorId(id);
-        for (FollowedAuthor followedAuthor : followedAuthors) {
-            FollowedAuthorDTOGetPostPut followedAuthorDTOGetPostPut = new FollowedAuthorDTOGetPostPut();
-            followedAuthorDTOGetPostPut.convertToFollowedAuthorDTO(followedAuthor);
-            followedAuthorsToReturn.add(followedAuthorDTOGetPostPut);
-        }
-        return followedAuthorsToReturn;
-    }
-
-    //This method returns an Optional of FollowedAuthorDTOGetPostPut
-    //First validates if the associated follower and author exist
-    //Creates a FollowedAuthor object, sets its attributes from FollowedAuthorDTO received as parameter and saves it by calling followedAuthorsRepository.save()
-    //Uses that FollowedAuthor as an assistant to save calling the repository save() function
-    //If the associated follower and author do not exist, returns an empty Optional
-    public Optional<FollowedAuthorDTOGetPostPut> saveFollowedAuthor(FollowedAuthorDTO followedAuthorDTO){
-        Optional<User> follower = userRepository.findById(followedAuthorDTO.getFollowerId());
-        Optional<User> author = userRepository.findById(followedAuthorDTO.getAuthorId());
-        if(follower.isPresent() && author.isPresent()){
-            FollowedAuthor followedAuthor = new FollowedAuthor();
-            followedAuthor.setFollower(follower.get());
-            followedAuthor.setAuthor(author.get());
-            followedAuthor.setCreationDate(LocalDateTime.now());
-            FollowedAuthorDTOGetPostPut savedFollowerAuthor = new FollowedAuthorDTOGetPostPut();
-            savedFollowerAuthor.convertToFollowedAuthorDTO(followedAuthorsRepository.save(followedAuthor));
-            return Optional.of(savedFollowerAuthor);
-        }else{
-            return Optional.empty();
-        }
-    }
-
-    //This method, validating the Optional in the if block, returns true if deletion was made or false if not
-    public boolean deleteFollowedAuthorById(long id){
-        if(followedAuthorsRepository.findById(id).isPresent()){
-            followedAuthorsRepository.deleteById(id);
+        if(tagsPostRepository.findById(id).isPresent()){
+            tagsPostRepository.deleteById(id);
             return true;
         }
         return false;

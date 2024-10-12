@@ -1,7 +1,9 @@
 package com.eam.blogging_platform.controller;
 
+import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.TagsPost;
 import com.eam.blogging_platform.service.TagsPostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,56 +16,60 @@ import java.util.Optional;
 @RequestMapping("/api/tagsPosts")
 public class TagsPostController {
 
-    @Autowired //Singleton backwards for just one tagsPostService instance
-    private TagsPostService tagsPostService;
+    private final TagsPostService tagsPostService;
 
-    //This method refers to tagsPostService.findAll() method. Brings out every TagsPost stored in database table tagsPost as a List of tagsPost
+    public TagsPostController(TagsPostService tagsPostService) {
+        this.tagsPostService = tagsPostService;
+    }
+
+    //This method refers to tagsPostService.findAll() method. Brings out every tags_post stored in database's table tagsPosts as a List of tags_post
     @GetMapping
-    public List<TagsPost> getAllTagsPosts() {
+    public List<Tag_PostDtoGetPostPut> getAllTag_Post() {
         return tagsPostService.findAll();
     }
 
-    //This method refers to tagsPostService.findById() method. Finds a specific role searching by id
-    //If the tagsPost is found, maps the ResponseEntity and returns a 200 OK Status.
-    //If there is not a tagsPost identified by that id, returns 404 Not Found Status
     @GetMapping("/{id}")
-    public ResponseEntity<TagsPost> getPostById(@PathVariable long id) {
-        Optional<TagsPost> tagsPost = tagsPostService.findById(id);
-        return tagsPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    //This method calls the findById method from tagsPostService that returns an Optional
+    //Then, tries to map the Optional tag_postDtoGetPostPut by using the .ok() function from ResponseEntity, for this the account has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    //It is equivalent to writing:
+        /*if(tag_postDtoGetPostPut.isPresent()){
+          return ResponseEntity.ok(tag_postDtoGetPostPut);
+        else{
+          return ResponseEntity.notFound().build();
+        }*/
+    public ResponseEntity<Tag_PostDtoGetPostPut> getTag_PostById(@PathVariable long id){
+        Optional<Tag_PostDtoGetPostPut> tag_postDtoGetPostPut = tagsPostService.findById(id);
+        return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
-    //This method refers to tagsPostService.save() method. Saves a new tagsPost in database table tagsPost
-    @PostMapping
-    public TagsPost createPost(@RequestBody TagsPost tagsPost) {
-        return tagsPostService.save(tagsPost);
+    @PostMapping("/register")
+    //This method calls the save method from tagsPostService that needs an Tag_PostDto object and returns an Optional
+    //Then, tries to map the Optional tag_postDtoGetPostPut by using the .ok() function from ResponseEntity
+    public ResponseEntity<?> createTagPost(@Valid @RequestBody Tag_PostDto tagPostDto){
+        Optional<Tag_PostDtoGetPostPut> tag_postDtoGetPostPut = tagsPostService.save(tagPostDto);
+        return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //This method refers to tagsPostService.findById() and roleService.save() methods. Finds a specific tagsPost searching by id and updates it
-    //If the tagsPost is found, sets the attributes to the tagsPost in edition, saves to update and returns a 200 OK Status.
-    //If there is not a tagsPost identified by that id, returns 404 Not Found Status
     @PutMapping("/{id}")
-    public ResponseEntity<TagsPost> updatePost(@PathVariable long id, @RequestBody TagsPost content) {
-        Optional<TagsPost> tagsPost = tagsPostService.findById(id);
-        if (tagsPost.isPresent()) {
-            TagsPost updatedTagsPost = tagsPost.get();
-            return ResponseEntity.ok(tagsPostService.save(updatedTagsPost));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    //This method calls the update method from tagsPostService that needs an id and a Tag_PostDto object and returns an Optional
+    //Then, tries to map the Optional tag_postDtoGetPostPut by using the .ok() function from ResponseEntity, for this the tag_postDtoGetPostPut has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    public ResponseEntity<Tag_PostDtoGetPostPut> updateTagPost(@PathVariable long id, @Valid @RequestBody Tag_PostDto tagPostDto){
+        Optional<Tag_PostDtoGetPostPut> tag_postDtoGetPostPut = tagsPostService.update(id, tagPostDto);
+        return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //This method refers to tagsPostService.findById() and tagsPostService.deleteById() methods. Finds a specific tagsPost searching by id and deletes it
-    //If the tagsPost is found, deletes it.
-    //If there is not a tagsPost identified by that id, returns 404 Not Found Status
+    //This method refers to tagsPostService.findById() and tagsPostService.deleteById() methods. Finds a specific tagspost searching by id and deletes it
+    //If the tag_post is found, deletes it.
+    //If there is not a tag_post identified by that id, returns 404 Not Found Status
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTagsPost(@PathVariable long id) {
-        if (tagsPostService.findById(id).isPresent()) {
-            tagsPostService.deleteById(id);
+    public ResponseEntity<TagsPost> deleteTag_Post(@PathVariable long id){
+        if(tagsPostService.deleteById(id)){
             return ResponseEntity.ok().build();
-        } else {
+        }else{
             return ResponseEntity.notFound().build();
         }
-
     }
 
 }
