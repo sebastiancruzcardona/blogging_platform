@@ -1,37 +1,95 @@
 package com.eam.blogging_platform.service;
 
-import com.eam.blogging_platform.entity.Status;
-import com.eam.blogging_platform.repository.StatusRepository;
+import com.eam.blogging_platform.dto.*;
+import com.eam.blogging_platform.entity.*;
+import com.eam.blogging_platform.repository.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StatusService {
 
-    @Autowired // Singleton backwards for just one StatusRepository instance
+    @Autowired
     private StatusRepository statusRepository;
 
-    // This method brings out every status stored in database's table status
-    public List<Status> findAll() {
-        return statusRepository.findAll();
+    /**
+     * Retrieves all status records from the database.
+     * @return List of StatusDTOGetPostPut representing all statuses.
+     */
+    public List<StatusDTOGetPostPut> findAllStatuses() {
+        List<StatusDTOGetPostPut> statusesToReturn = new ArrayList<>();
+        List<Status> statuses = statusRepository.findAll();
+        for (Status status : statuses) {
+            StatusDTOGetPostPut statusDTO = new StatusDTOGetPostPut();
+            statusDTO.convertToStatusDTO(status);
+            statusesToReturn.add(statusDTO);
+        }
+        return statusesToReturn;
     }
 
-    // This method finds a specific status searching by id
-    public Optional<Status> findById(long id) {
-        return statusRepository.findById(id);
+    /**
+     * Finds a status by its ID.
+     * @param id The ID of the status.
+     * @return Optional containing the StatusDTOGetPostPut if found, otherwise empty.
+     */
+    public Optional<StatusDTOGetPostPut> findStatusById(long id) {
+        Optional<Status> status = statusRepository.findById(id);
+        if (status.isPresent()) {
+            StatusDTOGetPostPut statusDTO = new StatusDTOGetPostPut();
+            statusDTO.convertToStatusDTO(status.get());
+            return Optional.of(statusDTO);
+        }
+        return Optional.empty();
     }
 
-    // This method saves a new status in database's table status
-    public Status save(Status status) {
-        return statusRepository.save(status);
+    /**
+     * Saves a new status in the database.
+     * @param statusDTO The status information to save.
+     * @return Optional containing the saved StatusDTOGetPostPut if successful.
+     */
+    public Optional<StatusDTOGetPostPut> saveStatus(@Valid StatusDTO statusDTO) {
+        Status status = new Status();
+        status.setStatus(statusDTO.getStatus());
+        Status savedStatus = statusRepository.save(status);
+        StatusDTOGetPostPut savedStatusDTO = new StatusDTOGetPostPut();
+        savedStatusDTO.convertToStatusDTO(savedStatus);
+        return Optional.of(savedStatusDTO);
     }
 
-    // This method deletes a specific status by using its id
-    public void deleteById(long id) {
-        statusRepository.deleteById(id);
+    /**
+     * Updates an existing status by its ID.
+     * @param id The ID of the status to update.
+     * @param statusDTO The updated status information.
+     * @return Optional containing the updated StatusDTOGetPostPut if successful.
+     */
+    public Optional<StatusDTOGetPostPut> updateStatus(long id, StatusDTO statusDTO) {
+        Optional<Status> status = statusRepository.findById(id);
+        if (status.isPresent()) {
+            Status statusToUpdate = status.get();
+            statusToUpdate.setStatus(statusDTO.getStatus());
+            StatusDTOGetPostPut updatedStatusDTO = new StatusDTOGetPostPut();
+            updatedStatusDTO.convertToStatusDTO(statusRepository.save(statusToUpdate));
+            return Optional.of(updatedStatusDTO);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Deletes a status by its ID.
+     * @param id The ID of the status to delete.
+     * @return True if the status was deleted, false otherwise.
+     */
+    public boolean deleteStatusById(long id) {
+        if (statusRepository.findById(id).isPresent()) {
+            statusRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
 
