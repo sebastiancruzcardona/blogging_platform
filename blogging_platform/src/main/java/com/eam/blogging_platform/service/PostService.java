@@ -2,6 +2,8 @@ package com.eam.blogging_platform.service;
 
 import com.eam.blogging_platform.dto.PostDto;
 import com.eam.blogging_platform.dto.PostDtoGetPostPut;
+import com.eam.blogging_platform.dto.PostLikesDislikesDTO;
+import com.eam.blogging_platform.dto.PostUpdateDTO;
 import com.eam.blogging_platform.entity.Post;
 import com.eam.blogging_platform.entity.Status;
 import com.eam.blogging_platform.entity.User;
@@ -79,27 +81,39 @@ public class PostService {
         }
     }
 
-    // This method returns an Optional of PostDTOGetPostPut that can be present or empty.
-    // First, it tries to find the post by id and the user and status by id, then, if the Optionals post, user, and status are present, sets the attributes and returns an Optional
-    // If there is not a post identified by that id, and/or the user or status does not exist, returns an empty optional
-    public Optional<PostDtoGetPostPut> update(long id, PostDto postDTO) {
+    //This method returns an Optional that can be present or empty.
+    //First, it tries to find the post by id, then, if the Optional post is present, sets the attributes and returns an Optional
+    //If there is not a post identified by that id, returns an empty optional
+    public Optional<PostDtoGetPostPut> update(long id, PostUpdateDTO postUpdateDTO) {
         Optional<Post> post = postRepository.findById(id);
-        Optional<User> user = userRepository.findById(postDTO.getUserId());
-        Optional<Status> status = statusRepository.findById(postDTO.getStatusId());
-        if (post.isPresent() && user.isPresent() && status.isPresent()) {
-            Post postUpdate = post.get();
-            postUpdate.setTitle(postDTO.getTitle());
-            postUpdate.setContent(postDTO.getContent());
-            postUpdate.setUser(user.get());
-            postUpdate.setStatus(status.get());
-            //postUpdate.setLikes(postDTO.getLikes());
-            //postUpdate.setDislikes(postDTO.getDislikes());
-            postUpdate.setLastUpdateDate(LocalDateTime.now());
-            PostDtoGetPostPut postDTOGetPostPut = new PostDtoGetPostPut();
-            postDTOGetPostPut.convertToPostDTO(postRepository.save(postUpdate));
-            return Optional.of(postDTOGetPostPut);
+        Optional<Status> status = statusRepository.findById(postUpdateDTO.getStatus_id());
+        if (post.isPresent() && status.isPresent()) {
+            Post updatedPosts = post.get();
+            updatedPosts.setTitle(postUpdateDTO.getTitle());
+            updatedPosts.setContent(postUpdateDTO.getContent());
+            updatedPosts.setStatus(status.get());
+            //When we have the statuses parameters in db, we can set the publication date here
+            //If status is published, set publication date
+            PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
+            postDtoGetPostPut.convertToPostDTO(postRepository.save(updatedPosts));
+            return Optional.of(postDtoGetPostPut);
+        } else {
+            return Optional.empty();
         }
-        return Optional.empty();
+    }
+
+    public Optional<PostDtoGetPostPut> updateLikesDislikes(long id, PostLikesDislikesDTO postLikesDislikesDTO) {
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent()) {
+            Post updatedPosts = post.get();
+            updatedPosts.setLikes(postLikesDislikesDTO.getLikes());
+            updatedPosts.setDislikes(postLikesDislikesDTO.getDislikes());
+            PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
+            postDtoGetPostPut.convertToPostDTO(postRepository.save(updatedPosts));
+            return Optional.of(postDtoGetPostPut);
+        } else {
+            return Optional.empty();
+        }
     }
 
     // This method, validating the Optional in the if block, returns true if deletion was made or false if not

@@ -2,6 +2,8 @@ package com.eam.blogging_platform.controller;
 
 import com.eam.blogging_platform.dto.PostDto;
 import com.eam.blogging_platform.dto.PostDtoGetPostPut;
+import com.eam.blogging_platform.dto.PostLikesDislikesDTO;
+import com.eam.blogging_platform.dto.PostUpdateDTO;
 import com.eam.blogging_platform.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,13 +54,25 @@ public class PostController {
     /**
      * Updates an existing post by its ID.
      * @param id The ID of the post to update.
-     * @param postDTO The updated post data.
+     * @param postUpdateDTO The updated post data.
      * @return ResponseEntity containing the updated PostDTOGetPostPut if successful, otherwise 404 Not Found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<PostDtoGetPostPut> updatePost(@PathVariable long id, @Valid @RequestBody PostDto postDTO) {
-        Optional<PostDtoGetPostPut> updatedPost = postService.update(id, postDTO);
-        return updatedPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    //This method calls the update method from postService that needs an id and a PostDto object and returns an Optional
+    //Then, tries to map the Optional PostDtoGetPostPut by using the .ok() function from ResponseEntity, for this the postDtoGetPostPut has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    public ResponseEntity<PostDtoGetPostPut> updatePost(@PathVariable long id, @Valid @RequestBody PostUpdateDTO postUpdateDTO) {
+        Optional<PostDtoGetPostPut> postDtoGetPostPut = postService.update(id, postUpdateDTO);
+        return postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("{id}/likesDislikes")
+    //This method calls the update method from postService that needs an id and a PostDto object and returns an Optional
+    //Then, tries to map the Optional PostDtoGetPostPut by using the .ok() function from ResponseEntity, for this the postDtoGetPostPut has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    public ResponseEntity<PostDtoGetPostPut> updatePostLikesDislikes(@PathVariable long id, @Valid @RequestBody PostLikesDislikesDTO postLikesDislikesDTO) {
+        Optional<PostDtoGetPostPut> postDtoGetPostPut = postService.updateLikesDislikes(id, postLikesDislikesDTO);
+        return postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
