@@ -9,8 +9,8 @@ public class CommentDtoGetPostPut {
 
     private Long id;
     private String comment;
-    private Long user_id;
-    private Long post_id;
+    private Long userId;
+    private Long postId;
     private LocalDateTime creation_date;
     private LocalDateTime last_update;
 
@@ -30,21 +30,19 @@ public class CommentDtoGetPostPut {
         this.comment = comment;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public void setPost_id(Long post_id) {
-        this.post_id = post_id;
-    }
+    public Long getPostId() {return postId;}
 
-    public LocalDateTime getCreation_date() {
-        return creation_date;
-    }
+    public void setPostId(Long postId) {this.postId = postId;}
+
+    public LocalDateTime getCreation_date() {return creation_date;}
 
     public void setCreation_date(LocalDateTime creation_date) {
         this.creation_date = creation_date;
@@ -61,8 +59,8 @@ public class CommentDtoGetPostPut {
     public void convertToCommentDTO(Comment comment) {
         this.setId(comment.getId());
         this.setComment(comment.getComment());
-        this.setUser_id(comment.getUser().getId());
-        this.setPost_id(comment.getPost().getId());
+        this.setUserId(comment.getUser().getId());
+        this.setPostId(comment.getPost().getId());
         this.setCreation_date(comment.getCreationDate());
         this.setLast_update(comment.getLastUpdateDate());
     }

@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comment")
 public class Comment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -42,13 +41,6 @@ public class Comment {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Comment(String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdateDate) {
-        this.comment = comment;
-        this.user = user;
-        this.post = post;
-        this.creationDate = creationDate;
-        this.lastUpdateDate = lastUpdateDate;
-    }
 
     public long getId() {
         return id;
@@ -62,20 +54,20 @@ public class Comment {
         this.comment = comment;
     }
 
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public LocalDateTime getCreationDate() {

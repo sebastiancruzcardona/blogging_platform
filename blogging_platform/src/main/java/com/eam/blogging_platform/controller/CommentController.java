@@ -1,7 +1,9 @@
-package com.eam.blogging_platform.controller;
+ package com.eam.blogging_platform.controller;
 
 import com.eam.blogging_platform.dto.CommentDto;
 import com.eam.blogging_platform.dto.CommentDtoGetPostPut;
+import com.eam.blogging_platform.dto.UserDTO;
+import com.eam.blogging_platform.dto.UserDTOGetPostPut;
 import com.eam.blogging_platform.entity.Comment;
 import com.eam.blogging_platform.service.CommentService;
 import jakarta.validation.Valid;
@@ -36,25 +38,25 @@ public class CommentController {
           return ResponseEntity.notFound().build();
         }*/
     public ResponseEntity<CommentDtoGetPostPut> getCommentById(@PathVariable long id) {
-        Optional<CommentDtoGetPostPut> commentDtoGetPostPut = commentService.findById(id);
-        return commentDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<CommentDtoGetPostPut> commentDto = commentService.findById(id);
+        return commentDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //This method refers to commentService.save() method. Saves a new comment in database table comments
-    @PostMapping
-    public CommentDtoGetPostPut createComment(@Valid @RequestBody CommentDto commentDto) {
-        return commentService.save(commentDto);
+
+    @PostMapping("/create")
+    public ResponseEntity<CommentDtoGetPostPut> saveComments(@Valid @RequestBody CommentDto commentDto) {
+        Optional<CommentDtoGetPostPut> savedComment = commentService.save(commentDto);
+        return savedComment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    //This method calls the update method from commentService that needs an id and a commentDto object and returns an Optional
-    //Then, tries to map the Optional CommentDtoGetPostPut by using the .ok() function from ResponseEntity, for this the commentDtoGetPostPut has to be present
+    //This method calls the update method from userService that needs an id and a UserDTO object and returns an Optional
+    //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the userDTOGetPostPut has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
-    public ResponseEntity<CommentDtoGetPostPut> updateComment(@PathVariable long id, @Valid @RequestBody CommentDto commentDto) {
+    public ResponseEntity<CommentDtoGetPostPut> updateComment(@PathVariable long id, @Valid @RequestBody CommentDto commentDto){
         Optional<CommentDtoGetPostPut> commentDtoGetPostPut = commentService.update(id, commentDto);
         return commentDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     //This method refers to commentService.findById() and commentService.deleteById() methods. Finds a specific comment searching by id and deletes it
     //If the comment is found, deletes it.
