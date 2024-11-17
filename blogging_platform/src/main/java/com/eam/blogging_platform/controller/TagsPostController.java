@@ -16,11 +16,9 @@ import java.util.Optional;
 @RequestMapping("/api/tagsPosts")
 public class TagsPostController {
 
-    private final TagsPostService tagsPostService;
+    @Autowired //Singleton backwards for just one TagsPostService instance
+    private TagsPostService tagsPostService;
 
-    public TagsPostController(TagsPostService tagsPostService) {
-        this.tagsPostService = tagsPostService;
-    }
 
     //This method refers to tagsPostService.findAll() method. Brings out every tags_post stored in database's table tagsPosts as a List of tags_post
     @GetMapping
@@ -38,24 +36,24 @@ public class TagsPostController {
         else{
           return ResponseEntity.notFound().build();
         }*/
-    public ResponseEntity<Tag_PostDtoGetPostPut> getTag_PostById(@PathVariable long id){
+    public ResponseEntity<Tag_PostDtoGetPostPut> getTag_PostById(@PathVariable long id) {
         Optional<Tag_PostDtoGetPostPut> tag_postDtoGetPostPut = tagsPostService.findById(id);
-        return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+        return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/register")
+    @PostMapping("/create")
     //This method calls the save method from tagsPostService that needs an Tag_PostDto object and returns an Optional
     //Then, tries to map the Optional tag_postDtoGetPostPut by using the .ok() function from ResponseEntity
-    public ResponseEntity<?> createTagPost(@Valid @RequestBody Tag_PostDto tagPostDto){
-        Optional<Tag_PostDtoGetPostPut> tag_postDtoGetPostPut = tagsPostService.save(tagPostDto);
-        return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Tag_PostDtoGetPostPut> saveTagPost(@Valid @RequestBody Tag_PostDto tagsPostDto) {
+        Optional<Tag_PostDtoGetPostPut> saveTagPost = tagsPostService.save(tagsPostDto);
+        return saveTagPost.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
     //This method calls the update method from tagsPostService that needs an id and a Tag_PostDto object and returns an Optional
     //Then, tries to map the Optional tag_postDtoGetPostPut by using the .ok() function from ResponseEntity, for this the tag_postDtoGetPostPut has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
-    public ResponseEntity<Tag_PostDtoGetPostPut> updateTagPost(@PathVariable long id, @Valid @RequestBody Tag_PostDto tagPostDto){
+    public ResponseEntity<Tag_PostDtoGetPostPut> updateTagPost(@PathVariable long id, @Valid @RequestBody Tag_PostDto tagPostDto) {
         Optional<Tag_PostDtoGetPostPut> tag_postDtoGetPostPut = tagsPostService.update(id, tagPostDto);
         return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -64,10 +62,10 @@ public class TagsPostController {
     //If the tag_post is found, deletes it.
     //If there is not a tag_post identified by that id, returns 404 Not Found Status
     @DeleteMapping("/{id}")
-    public ResponseEntity<TagsPost> deleteTag_Post(@PathVariable long id){
-        if(tagsPostService.deleteById(id)){
+    public ResponseEntity<TagsPost> deleteTag_Post(@PathVariable long id) {
+        if (tagsPostService.deleteById(id)) {
             return ResponseEntity.ok().build();
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

@@ -10,19 +10,19 @@ public class Tag_PostDto {
     @Min(1)
     private Long tagId;
 
-    public @Min(1) Long getPostId() {
+    public Long getPostId() {
         return postId;
     }
 
-    public void setPostId(@Min(1) Long postId) {
+    public void setPostId(Long postId) {
         this.postId = postId;
     }
 
-    public @Min(1) Long getTagId() {
+    public Long getTagId() {
         return tagId;
     }
 
-    public void setTagId(@Min(1) Long tagId) {
+    public void setTagId(Long tagId) {
         this.tagId = tagId;
     }
 }
