@@ -45,9 +45,8 @@ public class TagController {
 
     //This method refers to tagService.save() method. Saves a new tag in database table tags
     @PostMapping("/create")
-    public ResponseEntity<TagDtoGetPostPut> saveTags(@Valid @RequestBody TagDto tagDto) {
-        Optional<TagDtoGetPostPut> savedTag = tagService.save(tagDto);
-        return savedTag.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public TagDtoGetPostPut saveTags(@Valid @RequestBody TagDto tagDto) {
+        return tagService.save(tagDto);
     }
 
     @PutMapping("/{id}")
@@ -62,7 +61,7 @@ public class TagController {
     //This method refers to tag.findById() and tagService.deleteById() methods. Finds a specific tag searching by id and deletes it
     //If the role is found, deletes it.
     //If there is not a tag identified by that id, returns 404 Not Found Status
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Tag> deleteTag(@PathVariable long id){
         if(tagService.deleteById(id)){
             return ResponseEntity.ok().build();

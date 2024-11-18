@@ -45,13 +45,13 @@ public class TagService {
     //This method returns TagDtoGetPostPut object
 //Creates a tag object, sets its attributes from TagDTOGetPostPut received as parameter and saves it by calling tagRepository.save()
 //Uses that Tag as an assistant to save calling the repository save() function
-    public Optional<TagDtoGetPostPut> save(TagDto tagDto) {
+    public TagDtoGetPostPut save(TagDto tagDto) {
         Tag tag = new Tag();
         tag.setTag(tagDto.getTag());
         tag.setCreationDate(LocalDateTime.now());
         TagDtoGetPostPut savedTag = new TagDtoGetPostPut();
         savedTag.convertToTagDTO(tagRepository.save(tag));
-        return Optional.of(savedTag);
+        return savedTag;
     }
     
 
