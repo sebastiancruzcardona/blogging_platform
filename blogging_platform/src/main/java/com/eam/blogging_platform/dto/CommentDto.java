@@ -11,20 +11,20 @@ public class CommentDto {
     private String comment;
 
     @Min(1)
-    private Long user_id;
+    private Long userId;
 
     @Min(1)
-    private Long post_id;
+    private Long postId;
 
     public  String getComment() { return comment;}
 
     public void setComment(String comment) {this.comment = comment;}
 
-    public Long getUser_id() { return user_id;}
+    public Long getUserId() { return userId;}
 
-    public void setUser_id(Long user_id) { this.user_id = user_id;}
+    public void setUserId(Long userId) { this.userId = userId;}
 
-    public Long getPost_id() {return post_id;}
+    public Long getPostId() {return postId;}
 
-    public void setPost_id(Long post_id) {this.post_id = post_id;}
+    public void setPostId(Long postId) {this.postId = postId;}
 }
