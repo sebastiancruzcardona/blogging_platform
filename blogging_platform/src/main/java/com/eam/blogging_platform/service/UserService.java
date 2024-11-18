@@ -92,10 +92,10 @@ public class UserService {
             User userUpdate = user.get();
             userUpdate.setUsername(userDTO.getUsername());
             userUpdate.setEmail(userDTO.getEmail());
-            userUpdate.setPassword(userDTO.getPassword());
+            userUpdate.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             userUpdate.setRole(role.get());
             UserDTOGetPostPut userDTOGetPostPut = new UserDTOGetPostPut();
-            userDTOGetPostPut.convertToUserDTO(userUpdate);
+            userDTOGetPostPut.convertToUserDTO(userRepository.save(userUpdate));
             return Optional.of(userDTOGetPostPut);
         }
         return Optional.empty();
