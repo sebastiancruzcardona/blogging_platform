@@ -75,6 +75,7 @@ public class CommentService {
             comment.setPost(post.get());
             comment.setCreationDate(LocalDateTime.now());
             comment.setLastUpdateDate(LocalDateTime.now());
+            comment.setStatus(true); //A true status means tha the comment wil be visible
             CommentDtoGetPostPut savedComment = new CommentDtoGetPostPut();
             savedComment.convertToCommentDTO(commentRepository.save(comment));
             return Optional.of(savedComment);

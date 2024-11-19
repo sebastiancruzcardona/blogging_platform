@@ -28,19 +28,31 @@ public class Comment {
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
 
+    @Column(name = "status")
+    private boolean status;
+
     public Comment() {
         super();
     }
 
-    public Comment(long id, String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdateDate) {
+    public Comment(long id, String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdateDate, boolean status) {
         this.id = id;
         this.comment = comment;
         this.user = user;
         this.post = post;
         this.creationDate = creationDate;
         this.lastUpdateDate = lastUpdateDate;
+        this.status = status;
     }
 
+    public Comment(String comment, User user, Post post, LocalDateTime creationDate, LocalDateTime lastUpdateDate, boolean status) {
+        this.comment = comment;
+        this.user = user;
+        this.post = post;
+        this.creationDate = creationDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.status = status;
+    }
 
     public long getId() {
         return id;
@@ -84,6 +96,14 @@ public class Comment {
 
     public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
 

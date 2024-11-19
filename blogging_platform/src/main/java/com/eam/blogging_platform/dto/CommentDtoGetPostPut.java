@@ -13,6 +13,7 @@ public class CommentDtoGetPostPut {
     private Long postId;
     private LocalDateTime creation_date;
     private LocalDateTime last_update;
+    private boolean status;
 
     public Long getId() {
         return id;
@@ -56,6 +57,14 @@ public class CommentDtoGetPostPut {
         this.last_update = last_update;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public void convertToCommentDTO(Comment comment) {
         this.setId(comment.getId());
         this.setComment(comment.getComment());
@@ -63,6 +72,7 @@ public class CommentDtoGetPostPut {
         this.setPostId(comment.getPost().getId());
         this.setCreation_date(comment.getCreationDate());
         this.setLast_update(comment.getLastUpdateDate());
+        this.setStatus(comment.getStatus());
     }
 }
 
