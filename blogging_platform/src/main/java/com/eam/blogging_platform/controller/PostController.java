@@ -43,6 +43,12 @@ public class PostController {
         return postService.findPostsByUserId(id);
     }
 
+    //Method to get all posts that belong to a category
+    @GetMapping("/category/{id}")
+    public List<PostDtoGetPostPut> getPostsByCategoryId(@PathVariable long id){
+        return postService.findPostsByCategoryId(id);
+    }
+
     /**
      * Creates a new post.
      * @param postDTO The post data to create.
