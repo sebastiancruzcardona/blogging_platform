@@ -205,6 +205,30 @@ public class PostService {
         return postsToReturn;
     }
 
+    //This method returns an Optional of List<PostDtoGetPostPut> or an empty Optional
+    //Creates a date form dateSearchDto data
+    //Calls postRepository.findAll() to find all posts
+    //Iterates all over the post found and filtrates those that are published and if date matches with publication date adds that post to postsToReturn
+    public Optional<List<PostDtoGetPostPut>> findPostsByDate(DateSearchDto dateSearchDto){
+        String date = dateSearchDto.getYear() + "-" + dateSearchDto.getMonth() + "-" + (dateSearchDto.getDay());
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        List<Post> posts = postRepository.findAll();
+        for (Post post : posts) {
+            if(post.getPublication() != null){ //This validates if the post is published.
+                if(post.getPublication().toString().contains(date)){
+                    System.out.println(post.getPublication().toString());
+                    PostDtoGetPostPut postDTOGetPostPut = new PostDtoGetPostPut();
+                    postDTOGetPostPut.convertToPostDTO(post);
+                    postsToReturn.add(postDTOGetPostPut);
+                }
+            }
+        }
+        if(!postsToReturn.isEmpty()){
+            return Optional.of(postsToReturn);
+        }
+        return Optional.empty();
+    }
+
     // This method returns an Optional of PostDTOGetPostPut
     // First validates if the associated user and status exist
     // Creates a Post object, sets its attributes from PostDTO received as parameter and saves it by calling postRepository.save()
@@ -245,8 +269,11 @@ public class PostService {
             updatedPosts.setTitle(postUpdateDTO.getTitle());
             updatedPosts.setContent(postUpdateDTO.getContent());
             updatedPosts.setStatus(status.get());
+            updatedPosts.setLastUpdateDate(LocalDateTime.now());
             if(updatedPosts.getStatus().getId() == 2){
                 updatedPosts.setPublication(LocalDateTime.now());
+            }else{
+                updatedPosts.setPublication(null);
             }
             PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
             postDtoGetPostPut.convertToPostDTO(postRepository.save(updatedPosts));

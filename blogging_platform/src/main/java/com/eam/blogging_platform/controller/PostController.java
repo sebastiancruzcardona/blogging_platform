@@ -107,6 +107,13 @@ public class PostController {
         return postService.findAllPopularityOrdered();
     }
 
+    //This is a search filter method. Gets all published posts that belong to a specific tag by tag name
+    @GetMapping("/dateSearch")
+    public ResponseEntity<List<PostDtoGetPostPut>> getPostsByTagName(@Valid @RequestBody DateSearchDto dateSearchDto){
+        Optional<List<PostDtoGetPostPut>> posts = postService.findPostsByDate(dateSearchDto);
+        return posts.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    }
+
     /**
      * Creates a new post.
      * @param postDTO The post data to create.
