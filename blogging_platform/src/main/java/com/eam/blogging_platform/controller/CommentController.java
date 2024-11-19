@@ -51,6 +51,7 @@ public class CommentController {
         return commentService.findPermittedByPostId(id);
     }
 
+    //This method creates a new comment
     @PostMapping("/create")
     public ResponseEntity<CommentDtoGetPostPut> saveComments(@Valid @RequestBody CommentDto commentDto) {
         Optional<CommentDtoGetPostPut> savedComment = commentService.save(commentDto);
@@ -66,6 +67,9 @@ public class CommentController {
         return commentDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //By this method an admin can moderate comments by changing comment status.
+    //If status is true, comment is permitted
+    //Is status is false, comment rejected
     @PutMapping("/moderate/{id}")
     public ResponseEntity<CommentDtoGetPostPut> moderateComment(@PathVariable long id, @Valid @RequestBody CommentModerateDto commentModerateDto){
         Optional<CommentDtoGetPostPut> commentDtoGetPostPut = commentService.moderate(id, commentModerateDto);
