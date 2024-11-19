@@ -55,6 +55,9 @@ public class CategoryService {
      * @return Optional containing the saved CategoryDTOGetPostPut if successful.
      */
     public Optional<CategoryDTOGetPostPut> saveCategory(CategoryDTO categoryDTO) {
+        if(categoryRepository.findByCategory(categoryDTO.getCategory()).isPresent()){
+            return Optional.empty();
+        }
         Category category = new Category();
         category.setCategory(categoryDTO.getCategory());
         category.setDescription(categoryDTO.getDescription());
