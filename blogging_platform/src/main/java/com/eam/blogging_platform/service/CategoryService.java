@@ -74,6 +74,9 @@ public class CategoryService {
      * @return Optional containing the updated CategoryDTOGetPostPut if successful.
      */
     public Optional<CategoryDTOGetPostPut> updateCategory(long id, CategoryDTO categoryDTO) {
+        if(categoryRepository.findByCategory(categoryDTO.getCategory()).isPresent()){
+            return Optional.empty();
+        }
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             Category categoryToUpdate = category.get();
