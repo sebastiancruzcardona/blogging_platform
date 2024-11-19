@@ -2,10 +2,7 @@ package com.eam.blogging_platform.service;
 
 import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.*;
-import com.eam.blogging_platform.repository.CategoryRepository;
-import com.eam.blogging_platform.repository.PostRepository;
-import com.eam.blogging_platform.repository.StatusRepository;
-import com.eam.blogging_platform.repository.UserRepository;
+import com.eam.blogging_platform.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +24,9 @@ public class PostService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     // This method finds all posts stored in the database and returns a list of PostDTOGetPostPut
     public List<PostDtoGetPostPut> findAll() {
@@ -140,6 +140,18 @@ public class PostService {
             }
         }
         return postsToReturn;
+    }
+
+    //This method returns an Optionals of List<PostDtoGetPostPut>
+    //Calls tagRepository.findByTag() to find tag
+    //If tag exist, calls findPostsByTagId and returns the Optional of List<PostDtoGetPostPut>
+    //If there is not such tag, returns an empty Optional
+    public Optional<List<PostDtoGetPostPut>> findPostsByTagName(String tagName){
+        Optional<Tag> tag = tagRepository.findByTag(tagName);
+        if(tag.isPresent()){
+            return Optional.of(findPostsByTagId(tag.get().getId()));
+        }
+        return Optional.empty();
     }
 
     // This method returns an Optional of PostDTOGetPostPut
