@@ -39,6 +39,7 @@ public class CommentController {
         return commentDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Method to get all comments that belong to a specific post
     @GetMapping("/post/{id}")
     public List<CommentDtoGetPostPut> getCommentsByPostId(@PathVariable long id){
         return commentService.findByPostId(id);
