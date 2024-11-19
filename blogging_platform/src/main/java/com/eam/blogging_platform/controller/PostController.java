@@ -43,7 +43,7 @@ public class PostController {
         return postService.findPostsByUserId(id);
     }
 
-    //Method to get all posts that belong to a category
+    //This is a search filter method. Gets all published posts that belong to a specific category
     @GetMapping("/category/{id}")
     public List<PostDtoGetPostPut> getPostsByCategoryId(@PathVariable long id){
         return postService.findPostsByCategoryId(id);
