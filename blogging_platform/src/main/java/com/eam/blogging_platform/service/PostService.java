@@ -71,8 +71,9 @@ public class PostService {
             post.setDislikes(0);
             post.setCreation_date(LocalDateTime.now());
             post.setLastUpdateDate(LocalDateTime.now());
-            //When we have the statuses parameters in db, we can set the publication date here
-            //If status is published, set publication date
+            if(post.getStatus().getId() == 2){
+                post.setPublication(LocalDateTime.now());
+            }
             PostDtoGetPostPut savedPost = new PostDtoGetPostPut();
             savedPost.convertToPostDTO(postRepository.save(post));
             return Optional.of(savedPost);
@@ -92,8 +93,9 @@ public class PostService {
             updatedPosts.setTitle(postUpdateDTO.getTitle());
             updatedPosts.setContent(postUpdateDTO.getContent());
             updatedPosts.setStatus(status.get());
-            //When we have the statuses parameters in db, we can set the publication date here
-            //If status is published, set publication date
+            if(updatedPosts.getStatus().getId() == 2){
+                updatedPosts.setPublication(LocalDateTime.now());
+            }
             PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
             postDtoGetPostPut.convertToPostDTO(postRepository.save(updatedPosts));
             return Optional.of(postDtoGetPostPut);
