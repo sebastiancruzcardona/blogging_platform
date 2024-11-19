@@ -2,6 +2,7 @@ package com.eam.blogging_platform.service;
 
 import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.*;
+import com.eam.blogging_platform.repository.CategoryRepository;
 import com.eam.blogging_platform.repository.PostRepository;
 import com.eam.blogging_platform.repository.StatusRepository;
 import com.eam.blogging_platform.repository.UserRepository;
@@ -23,6 +24,9 @@ public class PostService {
 
     @Autowired
     private StatusRepository statusRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     // This method finds all posts stored in the database and returns a list of PostDTOGetPostPut
     public List<PostDtoGetPostPut> findAll() {
@@ -97,6 +101,37 @@ public class PostService {
             if(post.getStatus().getId() == 2){ //Status id = 2 -> Published
                 for(CategoriesPost categoriesPost : post.getCategoriesPosts()){
                     if(categoriesPost.getCategory().getId() == id){
+                        PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
+                        postDtoGetPostPut.convertToPostDTO(post);
+                        postsToReturn.add(postDtoGetPostPut);
+                    }
+                }
+            }
+        }
+        return postsToReturn;
+    }
+
+    //This method returns an Optionals of List<PostDtoGetPostPut>
+    //Calls categoryRepository.findByCategory() to find category
+    //If category exist, calls findPostsByCategoryId and returns the Optional of List<PostDtoGetPostPut>
+    //If there is not such category, returns an empty Optional
+    public Optional<List<PostDtoGetPostPut>> findPostsByCategoryName(String categoryName){
+        Optional<Category> category = categoryRepository.findByCategory(categoryName);
+        if(category.isPresent()){
+            return Optional.of(findPostsByCategoryId(category.get().getId()));
+        }
+        return Optional.empty();
+    }
+
+    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of published posts that have a specific tag
+    //Calls postRepository.findAll() and uses to nested for cycles to iterate over the posts and to add to the Arraylist to return
+    public List<PostDtoGetPostPut> findPostsByTagId(long id){
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        List<Post> posts = postRepository.findAll();
+        for (Post post : posts) {
+            if(post.getStatus().getId() == 2){ //Status id = 2 -> Published
+                for(TagsPost tagsPost : post.getTagsPosts()){
+                    if(tagsPost.getTag().getId() == id){ //Validate searched tag
                         PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
                         postDtoGetPostPut.convertToPostDTO(post);
                         postsToReturn.add(postDtoGetPostPut);

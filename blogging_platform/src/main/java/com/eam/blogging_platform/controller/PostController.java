@@ -62,6 +62,19 @@ public class PostController {
         return postService.findPostsByCategoryId(id);
     }
 
+    //This is a search filter method. Gets all published posts that belong to a specific category by category name
+    @GetMapping("/category/name/{categoryName}")
+    public ResponseEntity<List<PostDtoGetPostPut>> getPostsByCategoryName(@PathVariable String categoryName){
+        Optional<List<PostDtoGetPostPut>> posts = postService.findPostsByCategoryName(categoryName);
+        return posts.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    }
+
+    //This is a search filter method. Gets all published posts that have a specific tag
+    @GetMapping("/tag/{id}")
+    public List<PostDtoGetPostPut> findPostsByTagId(@PathVariable long id){
+        return postService.findPostsByTagId(id);
+    }
+
     /**
      * Creates a new post.
      * @param postDTO The post data to create.
