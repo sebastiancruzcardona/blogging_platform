@@ -1,9 +1,6 @@
 package com.eam.blogging_platform.controller;
 
-import com.eam.blogging_platform.dto.PostDto;
-import com.eam.blogging_platform.dto.PostDtoGetPostPut;
-import com.eam.blogging_platform.dto.PostLikesDislikesDTO;
-import com.eam.blogging_platform.dto.PostUpdateDTO;
+import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +35,11 @@ public class PostController {
     public ResponseEntity<PostDtoGetPostPut> getPostById(@PathVariable long id) {
         Optional<PostDtoGetPostPut> postDTO = postService.findById(id);
         return postDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/user/{id}")
+    public List<PostDtoGetPostPut> getPostsByUserId(@PathVariable long id){
+        return postService.findPostsByUserId(id);
     }
 
     /**
@@ -88,4 +90,6 @@ public class PostController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
 }

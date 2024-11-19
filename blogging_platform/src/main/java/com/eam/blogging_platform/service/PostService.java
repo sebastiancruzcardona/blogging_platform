@@ -1,9 +1,7 @@
 package com.eam.blogging_platform.service;
 
-import com.eam.blogging_platform.dto.PostDto;
-import com.eam.blogging_platform.dto.PostDtoGetPostPut;
-import com.eam.blogging_platform.dto.PostLikesDislikesDTO;
-import com.eam.blogging_platform.dto.PostUpdateDTO;
+import com.eam.blogging_platform.dto.*;
+import com.eam.blogging_platform.entity.FollowedAuthor;
 import com.eam.blogging_platform.entity.Post;
 import com.eam.blogging_platform.entity.Status;
 import com.eam.blogging_platform.entity.User;
@@ -51,6 +49,19 @@ public class PostService {
             return Optional.of(postDTOGetPostPut);
         }
         return Optional.empty();
+    }
+
+    //This method returns an Optional of FollowedAuthorDTOGetPostPut. This returns the list of follows of a follower
+    //Calls followedAuthorsRepository.findFollowedAuthorsByFollowerId() and uses a for cycle to iterate over the users and to add to the Arraylist to return
+    public List<PostDtoGetPostPut> findPostsByUserId(long id){
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        List<Post> posts = postRepository.findPostByUserId(id);
+        for (Post post : posts) {
+            PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
+            postDtoGetPostPut.convertToPostDTO(post);
+            postsToReturn.add(postDtoGetPostPut);
+        }
+        return postsToReturn;
     }
 
     // This method returns an Optional of PostDTOGetPostPut
