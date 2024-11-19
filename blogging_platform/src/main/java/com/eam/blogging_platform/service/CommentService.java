@@ -62,6 +62,21 @@ public class CommentService {
         return commentToReturn;
     }
 
+    //This method finds all permitted comments (status = true) that belong to a specific post and returns a list of CommentDtoGetPostPut
+    //Calls commentRepository.findCommentsByPostId() and uses a for cycle to iterate over the comments and to add to the Arraylist to return
+    public List<CommentDtoGetPostPut> findPermittedByPostId(long id) {
+        List<CommentDtoGetPostPut> commentsToReturn = new ArrayList<>();
+        List<Comment> comments = commentRepository.findCommentsByPostId(id);
+        for (Comment comment : comments) {
+            if(comment.getStatus()){ //If status is true
+                CommentDtoGetPostPut commentDtoGetPostPut = new CommentDtoGetPostPut();
+                commentDtoGetPostPut.convertToCommentDTO(comment);
+                commentsToReturn.add(commentDtoGetPostPut);
+            }
+        }
+        return commentsToReturn;
+    }
+
     //This method returns CommentDtoGetPostPut object
     //Creates a comment object, sets its attributes from CommentDtoGetPostPut received as parameter and saves it by calling commentRepository.save()
     //Uses that Comment as an assistant to save calling the repository save() function

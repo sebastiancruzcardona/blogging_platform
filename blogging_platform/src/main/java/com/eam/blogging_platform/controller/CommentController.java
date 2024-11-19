@@ -45,6 +45,12 @@ public class CommentController {
         return commentService.findByPostId(id);
     }
 
+    //Method to get all comments that belong to a specific post
+    @GetMapping("/post/{id}/permitted")
+    public List<CommentDtoGetPostPut> getPermittedCommentsByPostId(@PathVariable long id){
+        return commentService.findPermittedByPostId(id);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<CommentDtoGetPostPut> saveComments(@Valid @RequestBody CommentDto commentDto) {
         Optional<CommentDtoGetPostPut> savedComment = commentService.save(commentDto);
