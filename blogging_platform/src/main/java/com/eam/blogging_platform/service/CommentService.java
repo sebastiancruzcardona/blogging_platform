@@ -73,19 +73,14 @@ public class CommentService {
     //This method returns an Optional that can be present or empty.
     //First, it tries to find the Comment by id, then, if the Optional comment is present, sets the attributes and returns an Optional
     //If there is not a comment identified by that id, returns an empty optional
-    public Optional<CommentDtoGetPostPut> update(long id, CommentDto commentDto) {
+    public Optional<CommentDtoGetPostPut> update(long id, CommentUpdateDto commentUpdateDto) {
         Optional<Comment> comment = commentRepository.findById(id);
-        Optional<User> user = userRepository.findById(commentDto.getUserId());
-        Optional<Post> post = postRepository.findById(commentDto.getPostId());
-        if (comment.isPresent() && user.isPresent() && post.isPresent()) {
+        if (comment.isPresent()) {
             Comment commentUpdate = comment.get();
-            commentUpdate.setComment(comment.get().getComment());
-            commentUpdate.setUser(user.get()); // Replace with actual Post retrieval logic
-            commentUpdate.setPost(post.get()); // Replace with actual Category retrieval logic
-            commentUpdate.setCreationDate(comment.get().getCreationDate());
-            commentUpdate.setLastUpdateDate(comment.get().getLastUpdateDate());
+            commentUpdate.setComment(commentUpdateDto.getComment());
+            commentUpdate.setLastUpdateDate(LocalDateTime.now());
             CommentDtoGetPostPut commentDtoGetPostPut = new CommentDtoGetPostPut();
-            commentDtoGetPostPut.convertToCommentDTO(commentUpdate);
+            commentDtoGetPostPut.convertToCommentDTO(commentRepository.save(commentUpdate));
             return Optional.of(commentDtoGetPostPut);
         } else {
             return Optional.empty();

@@ -1,9 +1,6 @@
  package com.eam.blogging_platform.controller;
 
-import com.eam.blogging_platform.dto.CommentDto;
-import com.eam.blogging_platform.dto.CommentDtoGetPostPut;
-import com.eam.blogging_platform.dto.UserDTO;
-import com.eam.blogging_platform.dto.UserDTOGetPostPut;
+import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.Comment;
 import com.eam.blogging_platform.service.CommentService;
 import jakarta.validation.Valid;
@@ -53,15 +50,15 @@ public class CommentController {
     //This method calls the update method from userService that needs an id and a UserDTO object and returns an Optional
     //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the userDTOGetPostPut has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
-    public ResponseEntity<CommentDtoGetPostPut> updateComment(@PathVariable long id, @Valid @RequestBody CommentDto commentDto){
-        Optional<CommentDtoGetPostPut> commentDtoGetPostPut = commentService.update(id, commentDto);
+    public ResponseEntity<CommentDtoGetPostPut> updateComment(@PathVariable long id, @Valid @RequestBody CommentUpdateDto commentUpdateDto){
+        Optional<CommentDtoGetPostPut> commentDtoGetPostPut = commentService.update(id, commentUpdateDto);
         return commentDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     //This method refers to commentService.findById() and commentService.deleteById() methods. Finds a specific comment searching by id and deletes it
     //If the comment is found, deletes it.
     //If there is not a comment identified by that id, returns 404 Not Found Status
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Comment> deleteComment(@PathVariable long id) {
         if (commentService.deleteById(id)) {
             return ResponseEntity.ok().build();
