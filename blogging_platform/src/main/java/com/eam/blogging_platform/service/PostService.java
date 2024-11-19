@@ -76,6 +76,17 @@ public class PostService {
         return postsToReturn;
     }
 
+    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of published posts of an author
+    //Calls postRepository.findPostByUserId() and uses a for cycle to iterate over the posts and to add to the Arraylist to return
+    public Optional<List<PostDtoGetPostPut>> findPostsByAuthorUsername(String username){
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        Optional<User> author = userRepository.findByUsername(username);
+        if(author.isPresent()){
+            return Optional.of(findPostsByAuthorId(author.get().getId()));
+        }
+        return Optional.empty();
+    }
+
     //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of published posts that belong to a category
     //Calls postRepository.findAll() and uses to nested for cycles to iterate over the posts and to add to the Arraylist to return
     public List<PostDtoGetPostPut> findPostsByCategoryId(long id){
