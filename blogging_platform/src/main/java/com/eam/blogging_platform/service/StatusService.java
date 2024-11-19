@@ -53,6 +53,9 @@ public class StatusService {
      * @return Optional containing the saved StatusDTOGetPostPut if successful.
      */
     public Optional<StatusDTOGetPostPut> saveStatus(StatusDTO statusDTO) {
+        if(statusRepository.findByStatus(statusDTO.getStatus()).isPresent()){
+            return Optional.empty();
+        }
         Status status = new Status();
         status.setStatus(statusDTO.getStatus());
         Status savedStatus = statusRepository.save(status);
