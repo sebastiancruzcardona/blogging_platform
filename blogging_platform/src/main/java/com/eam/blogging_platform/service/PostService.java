@@ -182,6 +182,20 @@ public class PostService {
         return postsToReturn;
     }
 
+    // This method finds all posts stored in database that contain provided String (content) an returns a list of PostDTOGetPostPut
+    public List<PostDtoGetPostPut> findByContent(PostFindByContentDto postFindByContentDto) {
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        List<Post> posts = postRepository.findAll();
+        for (Post post : posts) {
+            if(post.getContent().contains(postFindByContentDto.getContent())){
+                PostDtoGetPostPut postDTOGetPostPut = new PostDtoGetPostPut();
+                postDTOGetPostPut.convertToPostDTO(post);
+                postsToReturn.add(postDTOGetPostPut);
+            }
+        }
+        return postsToReturn;
+    }
+
     // This method returns an Optional of PostDTOGetPostPut
     // First validates if the associated user and status exist
     // Creates a Post object, sets its attributes from PostDTO received as parameter and saves it by calling postRepository.save()

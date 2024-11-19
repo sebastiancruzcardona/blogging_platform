@@ -95,6 +95,12 @@ public class PostController {
         return postService.findPublished();
     }
 
+    //This is a search filter method. Search posts by content text coincidences
+    @GetMapping("/content")
+    public List<PostDtoGetPostPut> getPostsByContent(@Valid @RequestBody PostFindByContentDto postFindByContentDto) {
+        return postService.findByContent(postFindByContentDto);
+    }
+
     /**
      * Creates a new post.
      * @param postDTO The post data to create.
