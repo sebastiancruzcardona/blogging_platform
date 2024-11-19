@@ -42,16 +42,20 @@ public class TagService {
         return Optional.empty();
     }
 
-    //This method returns TagDtoGetPostPut object
-//Creates a tag object, sets its attributes from TagDTOGetPostPut received as parameter and saves it by calling tagRepository.save()
-//Uses that Tag as an assistant to save calling the repository save() function
-    public TagDtoGetPostPut save(TagDto tagDto) {
+    //This method returns an Optional of TagDtoGetPostPut object or an empty Optional
+    //Validates if there is a tag with the same name
+    //If not, creates a tag object, sets its attributes from TagDTOGetPostPut received as parameter and saves it by calling tagRepository.save()
+    //Uses that Tag as an assistant to save calling the repository save() function
+    public Optional<TagDtoGetPostPut> save(TagDto tagDto) {
+        if(tagRepository.findByTag(tagDto.getTag()).isPresent()){
+            return Optional.empty();
+        }
         Tag tag = new Tag();
         tag.setTag(tagDto.getTag());
         tag.setCreationDate(LocalDateTime.now());
         TagDtoGetPostPut savedTag = new TagDtoGetPostPut();
         savedTag.convertToTagDTO(tagRepository.save(tag));
-        return savedTag;
+        return Optional.of(savedTag);
     }
     
 

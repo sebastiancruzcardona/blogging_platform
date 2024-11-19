@@ -1,9 +1,6 @@
 package com.eam.blogging_platform.controller;
 
-import com.eam.blogging_platform.dto.CommentDto;
-import com.eam.blogging_platform.dto.CommentDtoGetPostPut;
-import com.eam.blogging_platform.dto.TagDto;
-import com.eam.blogging_platform.dto.TagDtoGetPostPut;
+import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.Tag;
 import com.eam.blogging_platform.service.TagService;
 import jakarta.validation.Valid;
@@ -45,8 +42,9 @@ public class TagController {
 
     //This method refers to tagService.save() method. Saves a new tag in database table tags
     @PostMapping("/create")
-    public TagDtoGetPostPut saveTags(@Valid @RequestBody TagDto tagDto) {
-        return tagService.save(tagDto);
+    public ResponseEntity<TagDtoGetPostPut> saveTags(@Valid @RequestBody TagDto tagDto) {
+        Optional<TagDtoGetPostPut> savedTag = tagService.save(tagDto);
+        return savedTag.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @PutMapping("/{id}")
