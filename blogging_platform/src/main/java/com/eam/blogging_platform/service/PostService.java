@@ -51,8 +51,8 @@ public class PostService {
         return Optional.empty();
     }
 
-    //This method returns an Optional of FollowedAuthorDTOGetPostPut. This returns the list of follows of a follower
-    //Calls followedAuthorsRepository.findFollowedAuthorsByFollowerId() and uses a for cycle to iterate over the users and to add to the Arraylist to return
+    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list posts of a user
+    //Calls postRepository.findPostByUserId() and uses a for cycle to iterate over the posts and to add to the Arraylist to return
     public List<PostDtoGetPostPut> findPostsByUserId(long id){
         List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
         List<Post> posts = postRepository.findPostByUserId(id);

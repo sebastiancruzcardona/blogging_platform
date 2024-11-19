@@ -37,6 +37,7 @@ public class PostController {
         return postDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Method to get all posts that a specific user has
     @GetMapping("/user/{id}")
     public List<PostDtoGetPostPut> getPostsByUserId(@PathVariable long id){
         return postService.findPostsByUserId(id);
