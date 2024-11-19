@@ -43,6 +43,12 @@ public class PostController {
         return postService.findPostsByUserId(id);
     }
 
+    //This is a search filter method. Gets all published posts that belong to a specific author
+    @GetMapping("/author/{id}")
+    public List<PostDtoGetPostPut> getPostsByAuthorId(@PathVariable long id){
+        return postService.findPostsByAuthorId(id);
+    }
+
     //This is a search filter method. Gets all published posts that belong to a specific category
     @GetMapping("/category/{id}")
     public List<PostDtoGetPostPut> getPostsByCategoryId(@PathVariable long id){

@@ -48,7 +48,7 @@ public class PostService {
         return Optional.empty();
     }
 
-    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list posts of a user
+    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of posts of a user
     //Calls postRepository.findPostByUserId() and uses a for cycle to iterate over the posts and to add to the Arraylist to return
     public List<PostDtoGetPostPut> findPostsByUserId(long id){
         List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
@@ -57,6 +57,21 @@ public class PostService {
             PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
             postDtoGetPostPut.convertToPostDTO(post);
             postsToReturn.add(postDtoGetPostPut);
+        }
+        return postsToReturn;
+    }
+
+    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of published posts of an author
+    //Calls postRepository.findPostByUserId() and uses a for cycle to iterate over the posts and to add to the Arraylist to return
+    public List<PostDtoGetPostPut> findPostsByAuthorId(long id){
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        List<Post> posts = postRepository.findPostByUserId(id);
+        for (Post post : posts) {
+            if(post.getStatus().getId() == 2){ //Status id = 2 -> Published
+                PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
+                postDtoGetPostPut.convertToPostDTO(post);
+                postsToReturn.add(postDtoGetPostPut);
+            }
         }
         return postsToReturn;
     }
