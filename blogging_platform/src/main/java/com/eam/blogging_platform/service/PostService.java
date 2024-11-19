@@ -168,6 +168,20 @@ public class PostService {
         return Optional.empty();
     }
 
+    // This method finds all posts stored in the database and returns a list of PostDTOGetPostPut
+    public List<PostDtoGetPostPut> findPublished() {
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        List<Post> posts = postRepository.findAll();
+        for (Post post : posts) {
+            if (post.getStatus().getId() == 2){
+                PostDtoGetPostPut postDTOGetPostPut = new PostDtoGetPostPut();
+                postDTOGetPostPut.convertToPostDTO(post);
+                postsToReturn.add(postDTOGetPostPut);
+            }
+        }
+        return postsToReturn;
+    }
+
     // This method returns an Optional of PostDTOGetPostPut
     // First validates if the associated user and status exist
     // Creates a Post object, sets its attributes from PostDTO received as parameter and saves it by calling postRepository.save()

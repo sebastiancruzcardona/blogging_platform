@@ -89,6 +89,12 @@ public class PostController {
         return post.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
+    //This method returns all published (status = 2) posts
+    @GetMapping("/published")
+    public List<PostDtoGetPostPut> getPublishedPosts() {
+        return postService.findPublished();
+    }
+
     /**
      * Creates a new post.
      * @param postDTO The post data to create.
