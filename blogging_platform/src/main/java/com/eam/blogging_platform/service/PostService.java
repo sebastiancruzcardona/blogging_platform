@@ -155,6 +155,20 @@ public class PostService {
     }
 
     // This method returns an Optional of PostDTOGetPostPut
+    // Using title, if the searched post exists, returns the optional, if not, returns an empty Optional
+    public Optional<PostDtoGetPostPut> findByTitle(String title) {
+        Optional<Post> post = postRepository.findPostByTitle(title);
+        if (post.isPresent()) {
+            if(post.get().getStatus().getId() == 2){ //Status id = 2 -> Published
+                PostDtoGetPostPut postDTOGetPostPut = new PostDtoGetPostPut();
+                postDTOGetPostPut.convertToPostDTO(post.get());
+                return Optional.of(postDTOGetPostPut);
+            }
+        }
+        return Optional.empty();
+    }
+
+    // This method returns an Optional of PostDTOGetPostPut
     // First validates if the associated user and status exist
     // Creates a Post object, sets its attributes from PostDTO received as parameter and saves it by calling postRepository.save()
     // Uses that Post as an assistant to save calling the repository save() function

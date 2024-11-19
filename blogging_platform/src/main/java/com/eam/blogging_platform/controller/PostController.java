@@ -82,6 +82,13 @@ public class PostController {
         return posts.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
+    //This is a search filter method. Serch a specific post by title
+    @GetMapping("/title/{title}")
+    public ResponseEntity<PostDtoGetPostPut> getPostsByTitle(@PathVariable String title){
+        Optional<PostDtoGetPostPut> post = postService.findByTitle(title);
+        return post.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    }
+
     /**
      * Creates a new post.
      * @param postDTO The post data to create.
