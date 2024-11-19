@@ -101,6 +101,23 @@ public class CommentService {
         }
     }
 
+    //This method returns an Optional that can be present or empty.
+    //First, it tries to find the Comment by id, then, if the Optional comment is present, sets the attributes and returns an Optional
+    //If there is not a comment identified by that id, returns an empty optional
+    public Optional<CommentDtoGetPostPut> moderate(long id, CommentModerateDto commentModerateDto) {
+        Optional<Comment> comment = commentRepository.findById(id);
+        if (comment.isPresent()) {
+            Comment commentUpdate = comment.get();
+            commentUpdate.setStatus(commentModerateDto.getStatus());
+            commentUpdate.setLastUpdateDate(LocalDateTime.now());
+            CommentDtoGetPostPut commentDtoGetPostPut = new CommentDtoGetPostPut();
+            commentDtoGetPostPut.convertToCommentDTO(commentRepository.save(commentUpdate));
+            return Optional.of(commentDtoGetPostPut);
+        } else {
+            return Optional.empty();
+        }
+    }
+
     //This method, validating the Optional in the if block, returns true if deletion was made or false if not
     public boolean deleteById(long id) {
         if (commentRepository.findById(id).isPresent()) {

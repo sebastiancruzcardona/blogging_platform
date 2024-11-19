@@ -60,6 +60,12 @@ public class CommentController {
         return commentDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/moderate/{id}")
+    public ResponseEntity<CommentDtoGetPostPut> moderateComment(@PathVariable long id, @Valid @RequestBody CommentModerateDto commentModerateDto){
+        Optional<CommentDtoGetPostPut> commentDtoGetPostPut = commentService.moderate(id, commentModerateDto);
+        return commentDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     //This method refers to commentService.findById() and commentService.deleteById() methods. Finds a specific comment searching by id and deletes it
     //If the comment is found, deletes it.
     //If there is not a comment identified by that id, returns 404 Not Found Status
