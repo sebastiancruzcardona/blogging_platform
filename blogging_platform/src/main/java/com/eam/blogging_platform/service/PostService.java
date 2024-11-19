@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -193,6 +194,14 @@ public class PostService {
                 postsToReturn.add(postDTOGetPostPut);
             }
         }
+        return postsToReturn;
+    }
+
+    //This method finds all published posts and returns a list of PostDTOGetPostPut sorted descending by
+    //number of likes
+    public List<PostDtoGetPostPut> findAllPopularityOrdered() {
+        List<PostDtoGetPostPut> postsToReturn = findPublished();
+        postsToReturn.sort(Comparator.comparingInt(PostDtoGetPostPut::getLikes).reversed());
         return postsToReturn;
     }
 

@@ -101,6 +101,12 @@ public class PostController {
         return postService.findByContent(postFindByContentDto);
     }
 
+    //This is a search filter method. Gets all publised posts and sorts them descending by number of likes
+    @GetMapping("/popularityOrdered")
+    public List<PostDtoGetPostPut> getPostsPopularityOrdered() {
+        return postService.findAllPopularityOrdered();
+    }
+
     /**
      * Creates a new post.
      * @param postDTO The post data to create.
