@@ -61,17 +61,19 @@ public class PostService {
         return postsToReturn;
     }
 
-    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of posts that belong to a category
+    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of published posts that belong to a category
     //Calls postRepository.findAll() and uses to nested for cycles to iterate over the posts and to add to the Arraylist to return
     public List<PostDtoGetPostPut> findPostsByCategoryId(long id){
         List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
         List<Post> posts = postRepository.findAll();
         for (Post post : posts) {
-            for(CategoriesPost categoriesPost : post.getCategoriesPosts()){
-                if(categoriesPost.getCategory().getId() == id){
-                    PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
-                    postDtoGetPostPut.convertToPostDTO(post);
-                    postsToReturn.add(postDtoGetPostPut);
+            if(post.getStatus().getId() == 2){ //Status id = 2 -> Published
+                for(CategoriesPost categoriesPost : post.getCategoriesPosts()){
+                    if(categoriesPost.getCategory().getId() == id){
+                        PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
+                        postDtoGetPostPut.convertToPostDTO(post);
+                        postsToReturn.add(postDtoGetPostPut);
+                    }
                 }
             }
         }
