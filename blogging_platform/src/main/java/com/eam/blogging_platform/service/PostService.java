@@ -76,10 +76,11 @@ public class PostService {
         return postsToReturn;
     }
 
-    //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of published posts of an author
-    //Calls postRepository.findPostByUserId() and uses a for cycle to iterate over the posts and to add to the Arraylist to return
+    //This method returns an Optionals of List<PostDtoGetPostPut>
+    //Calls userRepository.findByUsername() to find user
+    //If user exist, calls findPostsByAuthorId and returns the Optionals of List<PostDtoGetPostPut>
+    //If there is not such author, returns an empty Optional
     public Optional<List<PostDtoGetPostPut>> findPostsByAuthorUsername(String username){
-        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
         Optional<User> author = userRepository.findByUsername(username);
         if(author.isPresent()){
             return Optional.of(findPostsByAuthorId(author.get().getId()));
