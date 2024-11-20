@@ -2,8 +2,10 @@ package com.eam.blogging_platform.service;
 
 import com.eam.blogging_platform.dto.CategoriesPostDTO;
 import com.eam.blogging_platform.dto.CategoriesPostDTOGetPostPut;
+import com.eam.blogging_platform.dto.FollowedAuthorDTOGetPostPut;
 import com.eam.blogging_platform.entity.CategoriesPost;
 import com.eam.blogging_platform.entity.Category;
+import com.eam.blogging_platform.entity.FollowedAuthor;
 import com.eam.blogging_platform.entity.Post;
 import com.eam.blogging_platform.repository.CategoriesPostRepository;
 import com.eam.blogging_platform.repository.CategoryRepository;
@@ -55,6 +57,19 @@ public class CategoriesPostService {
             return Optional.of(categoriesPostDTO);
         }
         return Optional.empty();
+    }
+
+    //This method returns the list categoriesPost of a post
+    //Calls categoriesPostRepository.findByPostId() and uses a for cycle to iterate over the categoriesPosts and to add to the Arraylist to return
+    public List<CategoriesPostDTOGetPostPut> findCategoriesPostByPostId(long id){
+        List<CategoriesPostDTOGetPostPut> categoriesPostToReturn = new ArrayList<>();
+        List<CategoriesPost> categoriesPosts = categoriesPostRepository.findByPostId(id);
+        for (CategoriesPost categoriesPost : categoriesPosts) {
+            CategoriesPostDTOGetPostPut categoriesPostDTOGetPostPut = new CategoriesPostDTOGetPostPut();
+            categoriesPostDTOGetPostPut.convertToCategoriesPostDTO(categoriesPost);
+            categoriesPostToReturn.add(categoriesPostDTOGetPostPut);
+        }
+        return categoriesPostToReturn;
     }
 
     /**

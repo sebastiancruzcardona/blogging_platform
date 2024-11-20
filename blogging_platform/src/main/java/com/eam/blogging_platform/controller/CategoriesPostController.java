@@ -2,6 +2,7 @@ package com.eam.blogging_platform.controller;
 
 import com.eam.blogging_platform.dto.CategoriesPostDTO;
 import com.eam.blogging_platform.dto.CategoriesPostDTOGetPostPut;
+import com.eam.blogging_platform.dto.FollowedAuthorDTOGetPostPut;
 import com.eam.blogging_platform.service.CategoriesPostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,12 @@ public class CategoriesPostController {
     public ResponseEntity<CategoriesPostDTOGetPostPut> getCategoriesPostById(@PathVariable long id) {
         Optional<CategoriesPostDTOGetPostPut> categoriesPostDTO = categoriesPostService.findCategoriesPostById(id);
         return categoriesPostDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    //Get the list of categoriesPost of a specific post by ist id
+    @GetMapping("/post/{id}")
+    public List<CategoriesPostDTOGetPostPut> getCategoriesPostByPostId(@PathVariable long id){
+        return categoriesPostService.findCategoriesPostByPostId(id);
     }
 
     /**
