@@ -71,6 +71,9 @@ public class StatusService {
      * @return Optional containing the updated StatusDTOGetPostPut if successful.
      */
     public Optional<StatusDTOGetPostPut> updateStatus(long id, StatusDTO statusDTO) {
+        if(statusRepository.findByStatus(statusDTO.getStatus()).isPresent()){
+            return Optional.empty();
+        }
         Optional<Status> status = statusRepository.findById(id);
         if (status.isPresent()) {
             Status statusToUpdate = status.get();
