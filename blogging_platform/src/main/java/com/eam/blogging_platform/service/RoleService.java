@@ -42,6 +42,7 @@ public class RoleService {
     }
 
     //This method returns an Optional of RoleDTOGetPostPut or an empty Optional
+    //First, validates if te role attribute exists. If exists returns an empty Optional
     //Creates a role object, sets its attributes from roleDTO received as parameter and saves it by calling roleRepository.save()
     //Uses that Role as an assistant to save calling the repository save() function
     public Optional<RoleDTOGetPostPut> save(RoleDTO roleDTO) {
@@ -57,9 +58,13 @@ public class RoleService {
     }
 
     //This method returns an Optional that can be present or empty.
-    //First, it tries to find the Role by id, then, if the Optional role is present, sets the attributes and returns an Optional
+    //First, validates if te role attribute exists. If exists returns an empty Optional
+    //If it does not exist, it tries to find the Role by id, then, if the Optional role is present, sets the attributes and returns an Optional
     //If there is not a role identified by that id, returns an empty optional
     public Optional<RoleDTOGetPostPut> update(long id, RoleDTO roleDTO){
+        if(roleRepository.findByRole(roleDTO.getRole()).isPresent()){
+            return Optional.empty();
+        }
         Optional<Role> role = roleRepository.findById(id);
         if(role.isPresent()){
             Role updatedrole = role.get();
