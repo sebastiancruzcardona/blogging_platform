@@ -29,6 +29,9 @@ public class PostService {
     @Autowired
     private TagRepository tagRepository;
 
+    @Autowired
+    private CategoriesPostRepository categoriesPostRepository;
+
     // This method finds all posts stored in the database and returns a list of PostDTOGetPostPut
     public List<PostDtoGetPostPut> findAll() {
         List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
@@ -81,10 +84,9 @@ public class PostService {
         return postsToReturn;
     }
 
-    //This method returns an Optionals of List<PostDtoGetPostPut>
-    //Calls userRepository.findByUsername() to find user
-    //If user exist, calls findPostsByAuthorId and returns the Optionals of List<PostDtoGetPostPut>
-    //If there is not such author, returns an empty Optional
+    //This method returns a List<PostDtoGetPostPut>
+    //Calls userRepository.findByUsername() to find posts
+    //Only adds posts that are published
     public List<PostDtoGetPostPut> findPostsByAuthorUsername(String username){
         List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
         List<Post> posts = postRepository.findPostByUserUsername(username);
@@ -117,9 +119,11 @@ public class PostService {
         return postsToReturn;
     }
 
-    //This method returns an Optionals of List<PostDtoGetPostPut>
+    //This method returns an Optional of List<PostDtoGetPostPut> or an Optional empty if provided categoryName does not exist
     //Calls categoryRepository.findByCategory() to find category
-    //If category exist, calls findPostsByCategoryId and returns the Optional of List<PostDtoGetPostPut>
+    //If category exist, calls categoriesPostRepository.findByCategoryId and returns List<CategoriesPost>
+    //With a for loop iterates over the categoriesPosts list and gets de posts ids
+    //Uses the posts ids to find posts
     //If there is not such category, returns an empty Optional
     public Optional<List<PostDtoGetPostPut>> findPostsByCategoryName(String categoryName){
         Optional<Category> category = categoryRepository.findByCategory(categoryName);
@@ -193,7 +197,7 @@ public class PostService {
         List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
         List<Post> posts = postRepository.findAll();
         for (Post post : posts) {
-            if(post.getContent().contains(postFindByContentDto.getContent())){
+            if(post.getContent().toLowerCase().contains(postFindByContentDto.getContent().toLowerCase())){
                 PostDtoGetPostPut postDTOGetPostPut = new PostDtoGetPostPut();
                 postDTOGetPostPut.convertToPostDTO(post);
                 postsToReturn.add(postDTOGetPostPut);

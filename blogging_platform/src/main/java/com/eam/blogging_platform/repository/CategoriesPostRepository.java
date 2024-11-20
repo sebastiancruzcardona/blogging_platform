@@ -11,4 +11,5 @@ import java.util.List;
 public interface CategoriesPostRepository extends JpaRepository<CategoriesPost, Long>{
     Optional<CategoriesPost> findByPostIdAndCategoryId(Long postId, Long categoryId);
     List<CategoriesPost> findByPostId(Long postId);
+    List<CategoriesPost> findByCategoryId(Long categoryId);
 }
