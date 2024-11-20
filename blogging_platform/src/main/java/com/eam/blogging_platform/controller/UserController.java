@@ -52,6 +52,15 @@ public class UserController {
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/username/{username}")
+    //This method calls the findByUsername method from userService that returns an Optional
+    //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the account has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    public ResponseEntity<UserDTOGetPostPut> getUserByUsername(@PathVariable String username){
+        Optional<UserDTOGetPostPut> userDTOGetPostPut = userService.findByUsername(username);
+        return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    }
+
     //Method for admins to users registration
     @PostMapping("/admin/register")
     //This method calls the save method from userService that needs an UserDTO object and returns an Optional

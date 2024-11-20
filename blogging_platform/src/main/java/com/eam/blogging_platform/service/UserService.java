@@ -58,6 +58,18 @@ public class UserService {
     }
 
     //This method returns an Optional of UserDTOGetPostPut
+    //Using id, if the searched user exist, returns the optional, if not, returns an empty Optional
+    public Optional<UserDTOGetPostPut> findByUsername(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        if(user.isPresent()){
+            UserDTOGetPostPut userDTOGetPostPut = new UserDTOGetPostPut();
+            userDTOGetPostPut.convertToUserDTO(user.get());
+            return Optional.of(userDTOGetPostPut);
+        }
+        return Optional.empty();
+    }
+
+    //This method returns an Optional of UserDTOGetPostPut
     //First validates if the associated role exist
     //Creates a User object, sets its attributes from UserDTO received as parameter and saves it by calling userRepository.save()
     //Uses that User as an assistant to save calling the repository save() function
