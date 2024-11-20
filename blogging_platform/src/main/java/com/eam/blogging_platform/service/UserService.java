@@ -82,7 +82,7 @@ public class UserService {
     //This method returns an Optional of UserDTOGetPostPut
     //Creates a User object, sets its attributes from UserRegisterUpdateDTO received as parameter and saves it by calling userRepository.save()
     //Uses that User as an assistant to save calling the repository save() function
-    //Sets by default
+    //Sets role author by default
     public Optional<UserDTOGetPostPut> saveForUser(UserRegisterUpdateDTO userRegisterUpdateDTO){
         User user = new User();
         user.setUsername(userRegisterUpdateDTO.getUsername());
@@ -108,6 +108,23 @@ public class UserService {
             userUpdate.setEmail(userDTO.getEmail());
             userUpdate.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             userUpdate.setRole(role.get());
+            UserDTOGetPostPut userDTOGetPostPut = new UserDTOGetPostPut();
+            userDTOGetPostPut.convertToUserDTO(userRepository.save(userUpdate));
+            return Optional.of(userDTOGetPostPut);
+        }
+        return Optional.empty();
+    }
+
+    //This method returns an Optional of UserDTOGetPostPut that can be present or empty.
+    //First, it tries to find the user by id, then, if the Optional user is present, sets the attributes and returns an Optional
+    //If there is not a user identified by that id, returns an empty optional
+    public Optional<UserDTOGetPostPut> updateForUser(long id, UserRegisterUpdateDTO userRegisterUpdateDTO){
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            User userUpdate = user.get();
+            userUpdate.setUsername(userRegisterUpdateDTO.getUsername());
+            userUpdate.setEmail(userRegisterUpdateDTO.getEmail());
+            userUpdate.setPassword(passwordEncoder.encode(userRegisterUpdateDTO.getPassword()));
             UserDTOGetPostPut userDTOGetPostPut = new UserDTOGetPostPut();
             userDTOGetPostPut.convertToUserDTO(userRepository.save(userUpdate));
             return Optional.of(userDTOGetPostPut);

@@ -52,6 +52,7 @@ public class UserController {
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
+    //Method for admins to users registration
     @PostMapping("/admin/register")
     //This method calls the save method from userService that needs an UserDTO object and returns an Optional
     //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
@@ -60,6 +61,7 @@ public class UserController {
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Method for user (not admin) registration
     @PostMapping("/register")
     //This method calls the save method from userService that needs an UserDTO object and returns an Optional
     //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
@@ -86,12 +88,21 @@ public class UserController {
         return ResponseEntity.ok(jwt);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     //This method calls the update method from userService that needs an id and a UserDTO object and returns an Optional
     //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the userDTOGetPostPut has to be present
     //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
     public ResponseEntity<UserDTOGetPostPut> updateUser(@PathVariable long id, @Valid @RequestBody UserDTO userDTO){
         Optional<UserDTOGetPostPut> userDTOGetPostPut = userService.update(id, userDTO);
+        return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    //This method calls the update method from userService that needs an id and a UserDTO object and returns an Optional
+    //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the userDTOGetPostPut has to be present
+    //If the optional is empty, executes the orElseGet() implementing a ResponseEntity.notFound().build()
+    public ResponseEntity<UserDTOGetPostPut> updateUserForUser(@PathVariable long id, @Valid @RequestBody UserRegisterUpdateDTO userRegisterUpdateDTO){
+        Optional<UserDTOGetPostPut> userDTOGetPostPut = userService.updateForUser(id, userRegisterUpdateDTO);
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
