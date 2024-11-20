@@ -62,11 +62,13 @@ public class RoleService {
     //If it does not exist, it tries to find the Role by id, then, if the Optional role is present, sets the attributes and returns an Optional
     //If there is not a role identified by that id, returns an empty optional
     public Optional<RoleDTOGetPostPut> update(long id, RoleDTO roleDTO){
-        if(roleRepository.findByRole(roleDTO.getRole()).isPresent()){
-            return Optional.empty();
-        }
         Optional<Role> role = roleRepository.findById(id);
         if(role.isPresent()){
+            if(!role.get().getRole().equalsIgnoreCase(roleDTO.getRole())){
+                if(roleRepository.findByRole(roleDTO.getRole()).isPresent()){
+                    return Optional.empty();
+                }
+            }
             Role updatedrole = role.get();
             updatedrole.setRole(roleDTO.getRole());
             updatedrole.setDescription(roleDTO.getDescription());

@@ -73,7 +73,7 @@ public class StatusService {
     public Optional<StatusDTOGetPostPut> updateStatus(long id, StatusDTO statusDTO) {
         Optional<Status> status = statusRepository.findById(id);
         if (status.isPresent()) {
-            if(!status.get().getStatus().equals(statusDTO.getStatus())){
+            if(!status.get().getStatus().equalsIgnoreCase(statusDTO.getStatus())){
                 if(statusRepository.findByStatus(statusDTO.getStatus()).isPresent()){ //Validate if the nes status attribute is usable
                     return Optional.empty();
                 }
