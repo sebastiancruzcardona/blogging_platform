@@ -51,9 +51,8 @@ public class PostController {
 
     //This is a search filter method. Gets all published posts that belong to a specific author by username
     @GetMapping("/author/username/{username}")
-    public ResponseEntity<List<PostDtoGetPostPut>> getPostsByAuthorUsername(@PathVariable String username){
-        Optional<List<PostDtoGetPostPut>> posts = postService.findPostsByAuthorUsername(username);
-        return posts.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    public List<PostDtoGetPostPut> getPostsByAuthorUsername(@PathVariable String username){
+        return postService.findPostsByAuthorUsername(username);
     }
 
     //This is a search filter method. Gets all published posts that belong to a specific category

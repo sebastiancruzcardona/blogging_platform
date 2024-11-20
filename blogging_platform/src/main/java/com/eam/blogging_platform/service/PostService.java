@@ -85,12 +85,17 @@ public class PostService {
     //Calls userRepository.findByUsername() to find user
     //If user exist, calls findPostsByAuthorId and returns the Optionals of List<PostDtoGetPostPut>
     //If there is not such author, returns an empty Optional
-    public Optional<List<PostDtoGetPostPut>> findPostsByAuthorUsername(String username){
-        Optional<User> author = userRepository.findByUsername(username);
-        if(author.isPresent()){
-            return Optional.of(findPostsByAuthorId(author.get().getId()));
+    public List<PostDtoGetPostPut> findPostsByAuthorUsername(String username){
+        List<PostDtoGetPostPut> postsToReturn = new ArrayList<>();
+        List<Post> posts = postRepository.findPostByUserUsername(username);
+        for (Post post : posts) {
+            if(post.getStatus().getId() == 2){ //Status id = 2 -> Published
+                PostDtoGetPostPut postDtoGetPostPut = new PostDtoGetPostPut();
+                postDtoGetPostPut.convertToPostDTO(post);
+                postsToReturn.add(postDtoGetPostPut);
+            }
         }
-        return Optional.empty();
+        return postsToReturn;
     }
 
     //This method returns a list of Optionals of PostDtoGetPostPut. This returns the list of published posts that belong to a category
