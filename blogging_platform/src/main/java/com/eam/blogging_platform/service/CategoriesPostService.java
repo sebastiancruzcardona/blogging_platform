@@ -63,6 +63,9 @@ public class CategoriesPostService {
      * @return Optional containing the saved CategoriesPostDTOGetPostPut if successful.
      */
     public Optional<CategoriesPostDTOGetPostPut> saveCategoriesPost(CategoriesPostDTO categoriesPostDTO) {
+        if(categoriesPostRepository.findByPostIdAndCategoryId(categoriesPostDTO.getPostId(), categoriesPostDTO.getCategoryId()).isPresent()){
+            return Optional.empty(); //Return an empty Optional if the CategoriesPost already exist
+        }
         Optional<Category> category = categoryRepository.findById(categoriesPostDTO.getCategoryId());
         Optional<Post> post = postRepository.findById(categoriesPostDTO.getPostId());
         if(category.isPresent() && post.isPresent()) {
