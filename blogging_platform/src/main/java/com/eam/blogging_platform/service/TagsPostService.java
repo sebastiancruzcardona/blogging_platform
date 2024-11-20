@@ -53,6 +53,9 @@ public class TagsPostService {
     //Uses that TagsPost as an assistant to save calling the repository save() function
     //If the associated tag_post does not exist returns an empty Optional
     public Optional<Tag_PostDtoGetPostPut> save(Tag_PostDto tag_postDto){
+        if(tagsPostRepository.findByPostIdAndTagId(tag_postDto.getPostId(), tag_postDto.getTagId()).isPresent()){
+            return Optional.empty(); //Return an empty Optional if the tagsPost already exist
+        }
         Optional<Post> post = postRepository.findById(tag_postDto.getPostId());
         Optional<Tag> tag = tagRepository.findById(tag_postDto.getTagId());
         if(post.isPresent() && tag.isPresent()){
