@@ -60,14 +60,16 @@ public class TagService {
     
 
     //This method returns an Optional that can be present or empty.
-//First, it tries to find the Tag by id, then, if the Optional tag is present, sets the attributes and returns an Optional
-//If there is not a tag identified by that id, returns an empty optional
+    //First, validates if te tag exists. If exists validates the attribute tag to avoid duplicated tags in db
+    //Then crates a tag as an assistant to save by calling tagRepository.save
     public Optional<TagDtoGetPostPut> update(long id, TagDto tagDto) {
-        if(tagRepository.findByTag(tagDto.getTag()).isPresent()){
-            return Optional.empty();
-        }
         Optional<Tag> tag = tagRepository.findById(id);
         if (tag.isPresent()) {
+            if(!tag.get().getTag().equalsIgnoreCase(tagDto.getTag())){
+                if(tagRepository.findByTag(tagDto.getTag()).isPresent()){//Validate if tag is usable
+                    return Optional.empty();
+                }
+            }
             Tag updatedTag = tag.get();
             updatedTag.setTag(tagDto.getTag());
             TagDtoGetPostPut tagDtoGetPostPut = new TagDtoGetPostPut();
