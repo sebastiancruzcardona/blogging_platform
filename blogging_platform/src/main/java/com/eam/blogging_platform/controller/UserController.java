@@ -101,33 +101,39 @@ public class UserController {
 
     //FollowedAuthors methods
 
+    //Get all followed authors
     @GetMapping("/followedAuthors")
     public List<FollowedAuthorDTOGetPostPut> getAllFollowedAuthors() {
         return userService.findAllFollowedAuthors();
     }
 
+    //Get a specific followedAuthor by id
     @GetMapping("/followedAuthors/{id}")
     public ResponseEntity<FollowedAuthorDTOGetPostPut> getFollowedAuthorById(@PathVariable long id){
         Optional<FollowedAuthorDTOGetPostPut> followedAuthorDTOGetPostPut = userService.findFollowedAuthorById(id);
         return followedAuthorDTOGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
+    //Get the list of followedAuthors of a follower by its id
     @GetMapping("/followedAuthors/follower/{id}")
     public List<FollowedAuthorDTOGetPostPut> getFollowedAuthorByFollowerId(@PathVariable long id){
         return userService.findFollowedAuthorsByFollowerId(id);
     }
 
+    //Get the list of followedAuthors (followers) of a specific author by ist id
     @GetMapping("/followedAuthors/author/{id}")
     public List<FollowedAuthorDTOGetPostPut> getFollowedAuthorByAuthorId(@PathVariable long id){
         return userService.findFollowedAuthorsByAuthorId(id);
     }
 
+    //Create a new followedAuthor register
     @PostMapping("/followedAuthors")
     public ResponseEntity<FollowedAuthorDTOGetPostPut> createFollowedAuthor(@Valid @RequestBody FollowedAuthorDTO followedAuthorDTO){
         Optional<FollowedAuthorDTOGetPostPut> followedAuthorDTOGetPostPut = userService.saveFollowedAuthor(followedAuthorDTO);
         return followedAuthorDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Delete followedAuthor by id
     @DeleteMapping("/followedAuthors/{id}")
     public ResponseEntity<FollowedAuthor> deleteFollowedAuthor(@PathVariable long id){
         if(userService.deleteFollowedAuthorById(id)){
