@@ -119,11 +119,9 @@ public class PostService {
         return postsToReturn;
     }
 
-    //This method returns an Optional of List<PostDtoGetPostPut> or an Optional empty if provided categoryName does not exist
-    //Calls categoryRepository.findByCategory() to find category
-    //If category exist, calls categoriesPostRepository.findByCategoryId and returns List<CategoriesPost>
-    //With a for loop iterates over the categoriesPosts list and gets de posts ids
-    //Uses the posts ids to find posts
+    //This method returns an Optionals of List<PostDtoGetPostPut>
+    //Calls categoryRepository.findByCategory() to find the category
+    //If category exist, calls findPostsByCategoryId and returns the Optional of List<PostDtoGetPostPut>
     //If there is not such category, returns an empty Optional
     public Optional<List<PostDtoGetPostPut>> findPostsByCategoryName(String categoryName){
         Optional<Category> category = categoryRepository.findByCategory(categoryName);
