@@ -2,6 +2,8 @@ package com.eam.blogging_platform.controller;
 
 import com.eam.blogging_platform.dto.RoleDTO;
 import com.eam.blogging_platform.dto.RoleDTOGetPostPut;
+import com.eam.blogging_platform.dto.TagDto;
+import com.eam.blogging_platform.dto.TagDtoGetPostPut;
 import com.eam.blogging_platform.entity.Role;
 import com.eam.blogging_platform.service.RoleService;
 import jakarta.validation.Valid;
@@ -41,8 +43,9 @@ public class RoleController {
 
     //This method refers to roleService.save() method. Saves a new role in database table role
     @PostMapping
-    public RoleDTOGetPostPut createRole(@Valid @RequestBody RoleDTO roleDTO){
-        return roleService.save(roleDTO);
+    public ResponseEntity<RoleDTOGetPostPut> createRole(@Valid @RequestBody RoleDTO roleDTO){
+        Optional<RoleDTOGetPostPut> savedRole = roleService.save(roleDTO);
+        return savedRole.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
     
     @PutMapping("/{id}")

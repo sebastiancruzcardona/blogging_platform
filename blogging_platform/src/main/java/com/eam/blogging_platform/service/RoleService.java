@@ -41,16 +41,19 @@ public class RoleService {
         return Optional.empty();
     }
 
-    //This method returns RoleDTOGetPostPut object
-    //Creates a role object, sets its attributes from RoleDTOGetPostPut received as parameter and saves it by calling roleRepository.save()
+    //This method returns an Optional of RoleDTOGetPostPut or an empty Optional
+    //Creates a role object, sets its attributes from roleDTO received as parameter and saves it by calling roleRepository.save()
     //Uses that Role as an assistant to save calling the repository save() function
-    public RoleDTOGetPostPut save(RoleDTO roleDTO) {
+    public Optional<RoleDTOGetPostPut> save(RoleDTO roleDTO) {
+        if(roleRepository.findByRole(roleDTO.getRole()).isPresent()){
+            return Optional.empty();
+        }
         Role role = new Role();
         role.setRole(roleDTO.getRole());
         role.setDescription(roleDTO.getDescription());
         RoleDTOGetPostPut roleDTOGetPostPut = new RoleDTOGetPostPut();
         roleDTOGetPostPut.convertToRoleDTO(roleRepository.save(role));
-        return roleDTOGetPostPut;
+        return Optional.of(roleDTOGetPostPut);
     }
 
     //This method returns an Optional that can be present or empty.
