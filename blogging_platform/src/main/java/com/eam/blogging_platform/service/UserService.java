@@ -1,9 +1,6 @@
 package com.eam.blogging_platform.service;
 
-import com.eam.blogging_platform.dto.FollowedAuthorDTO;
-import com.eam.blogging_platform.dto.FollowedAuthorDTOGetPostPut;
-import com.eam.blogging_platform.dto.UserDTO;
-import com.eam.blogging_platform.dto.UserDTOGetPostPut;
+import com.eam.blogging_platform.dto.*;
 import com.eam.blogging_platform.entity.FollowedAuthor;
 import com.eam.blogging_platform.entity.Role;
 import com.eam.blogging_platform.entity.User;
@@ -80,6 +77,23 @@ public class UserService {
         }else{
             return Optional.empty();
         }
+    }
+
+    //This method returns an Optional of UserDTOGetPostPut
+    //Creates a User object, sets its attributes from UserRegisterUpdateDTO received as parameter and saves it by calling userRepository.save()
+    //Uses that User as an assistant to save calling the repository save() function
+    //Sets by default
+    public Optional<UserDTOGetPostPut> saveForUser(UserRegisterUpdateDTO userRegisterUpdateDTO){
+        User user = new User();
+        user.setUsername(userRegisterUpdateDTO.getUsername());
+        user.setEmail(userRegisterUpdateDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userRegisterUpdateDTO.getPassword())); //Encrypt password
+        user.setCreationDate(LocalDateTime.now());
+        Optional<Role> role = roleRepository.findByRole("author");
+        role.ifPresent(user::setRole);
+        UserDTOGetPostPut savedUser = new UserDTOGetPostPut();
+        savedUser.convertToUserDTO(userRepository.save(user));
+        return Optional.of(savedUser);
     }
 
     //This method returns an Optional of UserDTOGetPostPut that can be present or empty.

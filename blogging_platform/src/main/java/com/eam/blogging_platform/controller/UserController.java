@@ -52,11 +52,19 @@ public class UserController {
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/register")
+    @PostMapping("/admin/register")
     //This method calls the save method from userService that needs an UserDTO object and returns an Optional
     //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO){
         Optional<UserDTOGetPostPut> userDTOGetPostPut = userService.save(userDTO);
+        return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/register")
+    //This method calls the save method from userService that needs an UserDTO object and returns an Optional
+    //Then, tries to map the Optional userDTOGetPostPut by using the .ok() function from ResponseEntity, for this the accountDTOGetPostPut has to be present
+    public ResponseEntity<?> createUserForUser(@Valid @RequestBody UserRegisterUpdateDTO userRegisterUpdateDTO){
+        Optional<UserDTOGetPostPut> userDTOGetPostPut = userService.saveForUser(userRegisterUpdateDTO);
         return userDTOGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
