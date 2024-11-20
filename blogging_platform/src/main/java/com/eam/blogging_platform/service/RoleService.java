@@ -58,9 +58,8 @@ public class RoleService {
     }
 
     //This method returns an Optional that can be present or empty.
-    //First, validates if te role attribute exists. If exists returns an empty Optional
-    //If it does not exist, it tries to find the Role by id, then, if the Optional role is present, sets the attributes and returns an Optional
-    //If there is not a role identified by that id, returns an empty optional
+    //First, validates if te role exists. If exists validates the attribute role to avoid duplicated roles in db
+    //Then crates a role as an assistant to save by calling roleRepository.save
     public Optional<RoleDTOGetPostPut> update(long id, RoleDTO roleDTO){
         Optional<Role> role = roleRepository.findById(id);
         if(role.isPresent()){
