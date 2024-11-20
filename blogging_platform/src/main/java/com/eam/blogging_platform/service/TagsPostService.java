@@ -47,6 +47,19 @@ public class TagsPostService {
         return Optional.empty();
     }
 
+    //This method returns the list tagsPost of a post
+    //Calls tagsPostRepository.findByPostId() and uses a for cycle to iterate over the tagsPosts and to add to the Arraylist to return
+    public List<Tag_PostDtoGetPostPut> findTagsPostByPostId(long id){
+        List<Tag_PostDtoGetPostPut> tagsPostToReturn = new ArrayList<>();
+        List<TagsPost> tagsPosts = tagsPostRepository.findByPostId(id);
+        for (TagsPost tagsPost : tagsPosts) {
+            Tag_PostDtoGetPostPut tag_PostDtoGetPostPut = new Tag_PostDtoGetPostPut();
+            tag_PostDtoGetPostPut.convertToTagPostDTO(tagsPost);
+            tagsPostToReturn.add(tag_PostDtoGetPostPut);
+        }
+        return tagsPostToReturn;
+    }
+
     //This method returns an Optional of Tag_PostDtoGetPostPut
     //First validates if the associated tag_post exist
     //Creates a User object, sets its attributes from Tag_PostDto received as parameter and saves it by calling tagsPostRepository.save()

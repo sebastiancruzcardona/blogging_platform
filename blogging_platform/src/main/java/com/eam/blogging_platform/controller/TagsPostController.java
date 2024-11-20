@@ -41,6 +41,12 @@ public class TagsPostController {
         return tag_postDtoGetPostPut.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Get the list of tagsPost of a specific post by ist id
+    @GetMapping("/post/{id}")
+    public List<Tag_PostDtoGetPostPut> getTagsPostByPostId(@PathVariable long id){
+        return tagsPostService.findTagsPostByPostId(id);
+    }
+
     @PostMapping("/create")
     //This method calls the save method from tagsPostService that needs an Tag_PostDto object and returns an Optional
     //Then, tries to map the Optional tag_postDtoGetPostPut by using the .ok() function from ResponseEntity
