@@ -169,6 +169,9 @@ public class UserService {
     //Uses that FollowedAuthor as an assistant to save calling the repository save() function
     //If the associated follower and author do not exist, returns an empty Optional
     public Optional<FollowedAuthorDTOGetPostPut> saveFollowedAuthor(FollowedAuthorDTO followedAuthorDTO){
+        if(followedAuthorsRepository.findByFollowerIdAndAuthorId(followedAuthorDTO.getFollowerId(), followedAuthorDTO.getAuthorId()).isPresent()){
+            return Optional.empty(); //Return an empty Optional if the followedAuthor already exist
+        }
         Optional<User> follower = userRepository.findById(followedAuthorDTO.getFollowerId());
         Optional<User> author = userRepository.findById(followedAuthorDTO.getAuthorId());
         if(follower.isPresent() && author.isPresent()){
