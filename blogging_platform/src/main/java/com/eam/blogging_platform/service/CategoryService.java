@@ -74,11 +74,13 @@ public class CategoryService {
      * @return Optional containing the updated CategoryDTOGetPostPut if successful.
      */
     public Optional<CategoryDTOGetPostPut> updateCategory(long id, CategoryDTO categoryDTO) {
-        if(categoryRepository.findByCategory(categoryDTO.getCategory()).isPresent()){
-            return Optional.empty();
-        }
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
+            if(!category.get().getCategory().equalsIgnoreCase(categoryDTO.getCategory())){
+                if(categoryRepository.findByCategory(categoryDTO.getCategory()).isPresent()){ //Validate if category is usable
+                    return Optional.empty();
+                }
+            }
             Category categoryToUpdate = category.get();
             categoryToUpdate.setCategory(categoryDTO.getCategory());
             categoryToUpdate.setDescription(categoryDTO.getDescription());

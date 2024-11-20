@@ -64,7 +64,7 @@ public class RoleService {
         Optional<Role> role = roleRepository.findById(id);
         if(role.isPresent()){
             if(!role.get().getRole().equalsIgnoreCase(roleDTO.getRole())){
-                if(roleRepository.findByRole(roleDTO.getRole()).isPresent()){
+                if(roleRepository.findByRole(roleDTO.getRole()).isPresent()){ //Validate if role is usable
                     return Optional.empty();
                 }
             }
