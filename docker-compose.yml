@@ -25,7 +25,7 @@ services:
     networks:
       - app-network-cra
     healthcheck:
-      test: [ "CMD","mysql", "-u", "root", "-ppasswordRoot" ]
+      test: [ "CMD","mysql", "-u", "root", "-pblogginPassword" ]
       interval: 30s
       timeout: 10s
       retries: 5
