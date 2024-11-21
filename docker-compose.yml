@@ -1,0 +1,46 @@
+services:
+  #  --------------------------------------------
+  java-app-cra:
+    build:
+      context: ./blogging_platform
+      dockerfile: Dockerfile
+    container_name: java-app-cra
+    depends_on:
+      mysql-cra:
+        condition: service_healthy
+    ports:
+      - "8009:8080"
+    networks:
+      - app-network-cra
+  #  --------------------------------------------
+  mysql-cra:
+    build:
+      context: ./MySQL
+      dockerfile: Dockerfile
+    container_name: mysql-cra
+    volumes:
+      - ./MySQL/mysql_data:/var/lib/mysql
+    ports:
+      - "8011:3306"
+    networks:
+      - app-network-cra
+    healthcheck:
+      test: [ "CMD","mysql", "-u", "root", "-ppasswordRoot" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  #  --------------------------------------------
+  adminer-cra:
+    image: adminer
+    container_name: adminer-cra
+    depends_on:
+      - mysql-cra
+    ports:
+      - "8010:8080"
+    networks:
+      - app-network-cra
+#  --------------------------------------------
+networks:
+  app-network-cra:
+    driver: bridge
+    name: app-network-cra
