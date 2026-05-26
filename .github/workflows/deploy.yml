@@ -1,0 +1,73 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ 'main', 'desarrollo' ]
+  pull_request:
+    branches: [ 'main', 'desarrollo' ]
+
+jobs:
+  # 1. TRABAJO DE PRUEBAS (CI)
+  Test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    
+    # IMPORTANTE: Como 'mvnw' está dentro de un subdirectorio, cambiamos la ruta base
+    defaults:
+      run:
+        working-directory: ./blogging_platform
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Necesitamos instalar Java en el runner de GitHub para que Maven funcione
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      - name: Run Maven Tests
+        run: ./mvnw test
+
+  # 2. TRABAJO DE DESPLIEGUE (CD)
+  Deploy:
+    name: Deploy to EC2
+    needs: Test # <--- CRUCIAL: Esto indica que no puede haber Deploy si el 'Test' falla
+    if: github.ref == 'refs/heads/main' # <--- RESTRICCIÓN: Solo ejecuta en la rama main
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build & Deploy via SSH
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST_NAME: ${{ secrets.SSH_HOST }}
+          USER_NAME: ${{ secrets.USER_NAME }}
+
+        run: |
+          # Guardamos la llave privada y le asignamos los permisos correctos
+          echo "$PRIVATE_KEY" > private_key.pem && chmod 400 private_key.pem
+
+          # Nos conectamos a la instancia EC2 usando SSH
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOST_NAME} '
+
+          if [ ! -d "/home/ubuntu/cruz-rodriguez-arias/.git" ]; then
+            git clone https://github.com/sebastiancruzcardona/blogging_platform.git /home/ubuntu/cruz-rodriguez-arias;
+          fi
+
+          cd /home/ubuntu/cruz-rodriguez-arias &&
+
+          git checkout main &&
+          git fetch --all &&
+          git reset --hard origin/main &&
+          git pull origin main &&
+
+          docker compose build &&
+          docker compose up -d
+          '
