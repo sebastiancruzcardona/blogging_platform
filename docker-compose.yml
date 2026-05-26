@@ -12,10 +12,6 @@ services:
       - "8009:8080"
     networks:
       - app-network-cra
-    deploy:
-      resources:
-        limits:
-          memory: 450M
   #  --------------------------------------------
   mysql-cra:
     build:
@@ -34,10 +30,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
-    deploy:
-      resources:
-        limits:
-          memory: 350M
   #  --------------------------------------------
   adminer-cra:
     image: adminer
@@ -48,10 +40,6 @@ services:
       - "8010:8080"
     networks:
       - app-network-cra
-    deploy:
-      resources:
-        limits:
-          memory: 64M
 #  --------------------------------------------
 networks:
   app-network-cra:
