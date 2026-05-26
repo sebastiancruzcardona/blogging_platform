@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register").permitAll()
                         .requestMatchers("/api/users/login").permitAll()//Which ones can be accessed without a token. The url of the endpoint is entered. Several requestMatchers() can added. Instead of .permitAll() one can put .hasRole("role") .hasAnyRole(more than one role)
                         .requestMatchers("/api/posts/published").permitAll() //Any registered or invited user can view the published posts.
+                        .requestMatchers("/error").permitAll() //Allow access to the default error page without authentication
                         .anyRequest().authenticated() //Any other else needs authentication token
                 ) //Configure protected and unprotected URLs. By default they are all protected
                 .sessionManagement(sess -> sess
