@@ -128,6 +128,228 @@ Los entregables que se generarán como resultado de este ciclo de pruebas son:
 
 Todos estos entregables de código vivirán directamente en el repositorio de GitHub del proyecto, lo que garantizará que las pruebas y las evidencias viajen junto con el código fuente. La documentación complementaria se almacenará en [https://drive.google.com/drive/folders/18zlP5gFUVpzom9ZrSBJxC5xFq1AroYpC?usp=sharing](https://drive.google.com/drive/folders/18zlP5gFUVpzom9ZrSBJxC5xFq1AroYpC?usp=sharing) accesible para correos de la EAM, para garantizar su accesibilidad y trazabilidad.
 
+# **Casos de prueba**
+
+## **CP-User-Auth-01: UserDetailsServiceImpl.loadUserByUsername()**
+
+**Módulo:** User (autenticación de usuarios)
+
+**Objetivo de la prueba:** Validar que el servicio de autenticación recupere correctamente los detalles de seguridad de un usuario a partir de su username desde la base de datos, y verificar que la aplicación rechace de forma segura (lanzando la excepción correspondiente) los intentos de inicio de sesión con usuarios que no existen.
+
+**Descripción de casos de prueba:**
+
+(CP1) Pruebas de caja blanca sobre la función `loadUserByUsername()`. Se probarán dos escenarios:
+
+**Escenario Positivo: Inicio de sesión con un usuario existente.**
+
+Preparación: Se crea un objeto User en memoria (username "admin123", password "hashPassword" y rol "ROLE_ADMIN"). Se configura el Mock de UserRepository para que, cuando se llame al método `findByUsername("admin123")`, retorne un Optional que contiene a este usuario.
+
+Acción: Se invoca el método `loadUserByUsername("admin123")` del servicio evaluado.
+
+Resultado Esperado (Assert): El método debe retornar un objeto del tipo UserDetails (de Spring Security) no nulo. Se debe asegurar mediante aserciones (assertEquals) que el username, el password y los roles del objeto retornado coinciden exactamente con los de la entidad original mockeada.
+
+**Escenario Negativo: Inicio de sesión con un usuario inexistente.**
+
+Preparación: Se configura el Mock de UserRepository para que, al llamar al método `findByUsername("usuarioFalso")`, retorne un Optional.empty() (simulando que el usuario no está registrado en la base de datos).
+
+Acción: Se intenta invocar el método `loadUserByUsername("usuarioFalso")`.
+
+Resultado Esperado (Assert): El flujo de ejecución debe interrumpirse y el método debe lanzar explícitamente la excepción UsernameNotFoundException. Se debe validar con assertThrows() que la excepción es capturada correctamente por el entorno de prueba.
+
+**Escenarios:**
+
+1. Escenario positivo: Validar que el servicio de autenticación recupere correctamente los detalles de seguridad de un usuario a partir de su username.
+2. Escenario negativo: Verificar que la aplicación rechace de forma segura (lanzando la excepción correspondiente) los intentos de inicio de sesión con usuarios que no existen.
+
+## **CP-User-Service-02 a CP-User-Service-09: UserService (CRUD y consultas)**
+
+**Módulo:** User (gestión de usuarios): UserService
+
+**Objetivo:** Validar que el servicio permita ejecutar correctamente el CRUD de usuario + consultas y filtros de usuario:
+
+- UserService.save()
+- UserService.saveForUser()
+- UserService.update()
+- UserService.updateForUser()
+- UserService.deleteById()
+- UserService.findAll()
+- UserService.findById()
+- UserService.findByUsername()
+
+**Descripción:**
+
+(CP-02) Registro de un usuario por un Admin. Prueba de caja blanca sobre la función UserService.save().
+
+Objetivo: Validar la creación exitosa de un usuario asignando un rol específico proporcionado en el DTO.
+
+Proceso:
+Preparación: Se crea un UserDTO con datos de usuario y roleID = 1L. Se configura RoleRepository.findById(1L) para retornar un Optional<Role> presente. Se configura PasswordEncoder.encode() para retornar un hash simulado. Se configura UserRepository.save() para que retorne un objeto User con los datos poblados y el rol asignado.
+Acción: Se invoca UserService.save(userDTO).
+Resultado Esperado (Assert): El método debe retornar un Optional<UserDTOGetPostPut> presente. Mediante assertEquals se valida que los datos del DTO retornado coincidan con el DTO enviado inicialmente. Se verifica con verify() que userRepository.save() fue invocado exactamente una vez.
+
+(CP-03) Registro público de un usuario. Prueba de caja blanca sobre la función UserService.saveForUser().
+
+Objetivo: Validar el registro de un nuevo usuario forzando la asignación del rol por defecto ("author").
+
+Proceso:
+Preparación: Se crea un UserRegisterUpdateDTO con username, email y password. Se configura RoleRepository.findByRole("author") para retornar un Optional<Role> presente. Se configura PasswordEncoder.encode() para el hash. Se configura UserRepository.save() para retornar el User guardado.
+Acción: Se invoca UserService.saveForUser(userRegisterUpdateDTO).
+Resultado Esperado (Assert): El método debe retornar un Optional<UserDTOGetPostPut> presente. Mediante aserciones, se confirma que el objeto devuelto no es nulo y contiene los datos registrados. Se verifica con verify() que userRepository.save() fue invocado exactamente una vez.
+
+(CP-04) Actualización de un usuario por un Admin. Prueba de caja blanca sobre la función UserService.update().
+
+Objetivo: Validar la modificación correcta de los datos incluyendo el rol de un usuario existente mediante su ID.
+
+Proceso:
+Preparación: Se define id = 1L y un UserDTO con los datos a actualizar y roleID = 2L. Se configura UserRepository.findById(1L) para retornar un Optional<User> existente. Se configura RoleRepository.findById(2L) para retornar un nuevo Optional<Role>. Se configura PasswordEncoder.encode(). Se configura UserRepository.save() para retornar el usuario modificado.
+Acción: Se invoca UserService.update(1L, userDTO).
+Resultado Esperado (Assert): El método retorna un Optional<UserDTOGetPostPut> presente. Se valida mediante assertEquals que el DTO resultante refleja los nuevos valores inyectados desde el userDTO de entrada.
+
+(CP-05) Actualización del perfil propio de un usuario no Admin. Prueba de caja blanca sobre la función UserService.updateForUser().
+
+Objetivo: Validar que un usuario pueda actualizar sus campos básicos (username, email, password) sin alterar su rol.
+
+Proceso:
+Preparación: Se define id = 1L y un UserRegisterUpdateDTO con las modificaciones. Se configura UserRepository.findById(1L) para retornar un Optional<User> preexistente (que ya tiene un rol asignado internamente). Se configura PasswordEncoder.encode(). Se configura UserRepository.save() para retornar la entidad actualizada.
+Acción: Se invoca UserService.updateForUser(1L, userRegisterUpdateDTO).
+Resultado Esperado (Assert): Retorna un Optional<UserDTOGetPostPut> presente. Las aserciones confirman que los datos llanos (email, username) fueron modificados correctamente en el DTO de salida devuelto.
+
+(CP-06) Eliminar usuario. Prueba de caja blanca sobre la función UserService.deleteById().
+
+Objetivo: Verificar que el método confirma la existencia del ID y ejecuta el borrado, retornando confirmación de éxito.
+
+Proceso:
+Preparación: Se define id = 1L. Se configura UserRepository.findById(1L) para retornar un Optional<User> presente (validando que existe). El método deleteById(1L) del repositorio no requiere configuración (Mockito asume doNothing() para métodos void por defecto).
+Acción: Se invoca UserService.deleteById(1L).
+Resultado Esperado (Assert): El método debe retornar el booleano true. Se usa assertTrue(resultado) para validarlo. Se constata mediante verify(userRepository, times(1)).deleteById(1L) que la instrucción de borrado en base de datos fue realizada una vez.
+
+(CP-07) Obtener todos los usuarios. Prueba de caja blanca sobre la función UserService.findAll().
+
+Objetivo: Validar que el método retorne correctamente la lista de todos los usuarios registrados, convertidos a sus respectivos DTOs de salida.
+
+Proceso:
+Preparación: Se crea una List<User> simulada en memoria que contenga al menos dos objetos User debidamente poblados. Se configura el mock UserRepository.findAll() para que retorne esta lista.
+Acción: Se invoca UserService.findAll().
+Resultado Esperado (Assert): El método debe retornar un objeto de tipo List<UserDTOGetPostPut>. Se utilizan aserciones para asegurar que la lista devuelta no sea nula (assertNotNull) y que su tamaño (size()) sea exactamente igual a la lista simulada. Se puede verificar que al menos un dato (ej. el email del primer elemento) coincida, validando asi la correcta conversion manual que hace el ciclo for interno. Se verifica una sola invocacion al userRepository.findAll().
+
+(CP-08) Obtener usuario por ID. Prueba de caja blanca sobre la función UserService.findById().
+
+Objetivo: Validar la recuperacion correcta y el mapeo a DTO de un usuario especifico dado su ID de base de datos.
+
+Proceso:
+Preparacion: Se define id = 1L y se crea en memoria una entidad User con ese ID. Se configura el mock UserRepository.findById(1L) para retornar un Optional<User> presente que contenga dicha entidad.
+Accion: Se invoca UserService.findById(1L).
+Resultado Esperado (Assert): El metodo debe retornar un Optional<UserDTOGetPostPut> presente. Mediante assertEquals se valida que los datos nativos de la entidad (ej. username, email) se hayan transferido intactos al DTO encapsulado. Se verifica con verify() que userRepository.findById(1L) fue ejecutado exactamente una vez.
+
+(CP-09) Obtener un usuario por username. Prueba de caja blanca sobre la función UserService.findByUsername().
+
+Objetivo: Validar la busqueda, hallazgo y conversion a DTO de un usuario partiendo estrictamente de su nombre de usuario.
+
+Proceso:
+Preparacion: Se define username = "sebastian_admin" y se crea el User respectivo en memoria. Se configura el mock UserRepository.findByUsername("sebastian_admin") para que retorne el Optional.of(user) correspondiente a dicha entidad.
+Accion: Se invoca UserService.findByUsername("sebastian_admin").
+Resultado Esperado (Assert): Retorna el Optional<UserDTOGetPostPut> correctamente presente. Las aserciones confirman que el atributo username del DTO interno coincida perfectamente con la cadena enviada como parametro. Se usa verify(userRepository).findByUsername("sebastian_admin") para asegurar que la capa de datos simulada proceso la instruccion correctamente de acuerdo a ese parametro unico.
+
+**Escenarios:**
+
+1. (CP-02) Registro de un usuario por un Admin: Validar la creación exitosa de un usuario asignando un rol específico proporcionado en el DTO.
+2. (CP-03) Registro público de un usuario: Validar el registro de un nuevo usuario forzando la asignación del rol por defecto ("author").
+3. (CP-04) Actualización de un usuario por un Admin: Validar la modificación correcta de los datos incluyendo el rol de un usuario existente mediante su ID.
+4. (CP-05) Actualización del perfil propio de un usuario no Admin: Validar que un usuario pueda actualizar sus campos básicos (username, email, password) sin alterar su rol.
+5. (CP-06) Eliminar usuario: Verificar que el método confirma la existencia del ID y ejecuta el borrado, retornando confirmación de éxito.
+6. (CP-07) Obtener todos los usuarios: Validar que el método retorne correctamente la lista de todos los usuarios registrados, convertidos a sus respectivos DTOs de salida.
+7. (CP-08) Obtener usuario por ID: Validar la recuperación correcta y el mapeo a DTO de un usuario específico dado su ID de base de datos.
+8. (CP-09) Obtener un usuario por username: Validar la búsqueda, hallazgo y conversión a DTO de un usuario partiendo estrictamente de su username.
+
+## **CP-Post-Service-10 a CP-Post-Service-16: PostService (CRUD y consultas)**
+
+**Módulo:** Post (gestión de posts): PostService
+
+**Objetivo:** Validar que el servicio permita ejecutar correctamente el CRUD de post + consultas y filtros de post:
+
+- PostService.save()
+- PostService.update()
+- PostService.deleteById()
+- PostService.findAll()
+- PostService.findById()
+- PostService.findPublished()
+- PostService.updateLikesDislikes()
+
+**Descripción:**
+
+(CP-10) Crear post. Prueba de caja blanca sobre la función PostService.save().
+
+Objetivo: Validar la correcta creación de un Post, garantizando la vinculación del usuario que lo creó, el estado asignado y el establecimiento inicial de variables (likes, dislikes, fechas).
+
+Proceso:
+Preparación: Se crea un PostDto válido (con userId = 1L y statusId = 1L). Se configuran los mocks: UserRepository.findById(1L) retorna un Optional<User> presente, y StatusRepository.findById(1L) retorna un Optional<Status> presente. Se configura PostRepository.save() para retornar una entidad Post idéntica a la enviada.
+Acción: Se invoca PostService.save(postDto).
+Resultado Esperado (Assert): El método debe retornar un Optional<PostDtoGetPostPut> presente. Las aserciones deben validar que el DTO devuelto tenga contadores inicializados (likes == 0, dislikes == 0). Se utiliza verify() para confirmar que postRepository.save(any(Post.class)) fue invocado exactamente una vez.
+
+(CP-11) Editar post. Prueba de caja blanca sobre la función PostService.update().
+
+Objetivo: Asegurar que las actualizaciones modifiquen correctamente campos como el título y contenido, y actualicen la fecha de última modificación sin corromper el creador original.
+
+Proceso:
+Preparación: Se define id = 10L y un PostUpdateDTO con nuevos valores y un status_id = 2L. Se configura PostRepository.findById(10L) para retornar un Optional<Post> preexistente, y StatusRepository.findById(2L) para retornar el nuevo estado. Finalmente, PostRepository.save() se configura para regresar la entidad actualizada.
+Acción: Se llama a PostService.update(10L, postUpdateDTO).
+Resultado Esperado (Assert): Retorna Optional<PostDtoGetPostPut> presente. Mediante assertEquals se confirma que la información del DTO de retorno provienen del objeto postUpdateDTO ingresado.
+
+(CP-12) Eliminar post. Prueba de caja blanca sobre la función PostService.deleteById().
+
+Objetivo: Verificar que el método confirma la existencia del ID, ejecuta el borrado del post y retorna confirmación de éxito.
+
+Proceso:
+Preparación: Se define id = 99L. Se programa PostRepository.findById(99L) para retornar un Optional<Post> indicando que el registro existe y que el código debe proceder al bloque if principal.
+Acción: Se dispara el método PostService.deleteById(99L).
+Resultado Esperado (Assert): La función evaluada debe retornar explícitamente true. Esto se acompaña validando sistemáticamente el pase al nivel de datos con verify(postRepository, times(1)).deleteById(99L).
+
+(CP-13) Obtener todos los posts. Prueba de caja blanca sobre la función PostService.findAll().
+
+Objetivo: Validar que el método retorne correctamente la lista de todos los posts registrados, convertidos a sus respectivos DTOs de salida, contrastando el tamaño de la lista de salida esperado con el tamaño de la lista retornada.
+
+Proceso:
+Preparación: Se instancia localmente una List<Post> cargada con entidades. Se vincula al mock PostRepository.findAll() para que esta estructura sea devuelta automáticamente.
+Acción: Se lanza PostService.findAll().
+Resultado Esperado (Assert): Debe retornar un objeto de tipo List<PostDtoGetPostPut>. Se aplica un assertEquals(expectedListSize, returnedList.size()) constatando el número exacto, más la comprobación de una sola ejecución de PostRepository.findAll().
+
+(CP-14) Obtener post por ID. Prueba de caja blanca sobre la función PostService.findById().
+
+Objetivo: Validar la recuperación correcta y el mapeo a DTO de un post específico dado su ID de base de datos.
+
+Proceso:
+Preparación: Se define id = 1L y se crea en memoria una entidad Post con ese ID. Se configura el mock PostRepository.findById(1L) para retornar un Optional<Post> presente que contenga dicha entidad.
+Acción: Se invoca PostService.findById(1L).
+Resultado Esperado (Assert): El método debe retornar un Optional<PostDtoGetPostPut> presente. Mediante assertEquals se valida que los datos nativos de la entidad (ej. title, content) se hayan transferido intactos al DTO encapsulado. Se verifica con verify() que postRepository.findById(1L) fue ejecutado solamente una vez.
+
+(CP-15) Obtener posts publicados. Prueba de caja blanca sobre la función PostService.findPublished().
+
+Objetivo: Validar la obtención y filtrado correcto de los posts, asegurando que se retornen y mapeen a DTO únicamente aquellos cuyo estado corresponda a "Publicado" (status_id = 2L).
+
+Proceso:
+Preparación: Se crea en memoria una List<Post> que incluya entidades mixtas: algunas con un Status cuyo ID sea 2L (Publicado) y otras con un ID diferente (ej. 1L para Borrador). Se configura el mock PostRepository.findAll() para retornar esta lista predefinida.
+Acción: Se invoca PostService.findPublished().
+Resultado Esperado (Assert): El método debe retornar una List<PostDtoGetPostPut>. Mediante assertEquals se valida que el tamaño de la lista resultante coincida exclusivamente con la cantidad de posts "Publicados" que se prepararon en la lista original. Se verifica con verify() que postRepository.findAll() fue ejecutado únicamente una vez.
+
+(CP-16) Actualizar Likes/Dislikes de un post. Prueba de caja blanca sobre la función PostService.updateLikesDislikes().
+
+Objetivo: Comprobar la modificación precisa de los atributos numéricos de engagement social sin alterar el resto de la entidad.
+
+Proceso:
+Preparación: Se define id = 15L y se crea un PostLikesDislikesDTO con métricas (ej. likes = 5, dislikes = 1). Se configura PostRepository.findById(15L) inyectando un Post simulado donde esos valores eran 0. Se configura el PostRepository.save() para retornar este Post tras asignarle las nuevas métricas.
+Acción: Se ejecuta PostService.updateLikesDislikes(15L, postLikesDislikesDTO).
+Resultado Esperado (Assert): El método devuelve Optional<PostDtoGetPostPut> presente. Se comprueba mediante assertEquals(5, dto.getLikes()) que la operación modificó las variables exclusivamente y guardó el cambio.
+
+**Escenarios:**
+
+1. (CP-10) Crear post: Validar la correcta creación de un Post, garantizando la vinculación del usuario que lo creó, el estado asignado y el establecimiento inicial de variables (likes, dislikes, fechas).
+2. (CP-11) Editar post: Asegurar que las actualizaciones modifiquen correctamente campos como el título y contenido, y actualicen la fecha de última modificación sin corromper el creador original.
+3. (CP-12) Eliminar post: Verificar que el método confirma la existencia del ID, ejecuta el borrado del post y retorna confirmación de éxito.
+4. (CP-13) Obtener todos los posts: Validar que el método retorne correctamente la lista de todos los posts registrados, convertidos a sus respectivos DTOs de salida, contrastando el tamaño de la lista de salida esperado con el tamaño de la lista retornada.
+5. (CP-14) Obtener post por ID: Validar la recuperación correcta y el mapeo a DTO de un post específico dado su ID de base de datos.
+6. (CP-15) Obtener posts publicados: Validar la obtención y filtrado correcto de los posts, asegurando que se retornen y mapeen a DTO únicamente aquellos cuyo estado corresponda a "Publicado" (status_id = 2L).
+7. (CP-16) Actualizar Likes/Dislikes de un post: Comprobar la modificación precisa de los atributos numéricos de engagement social sin alterar el resto de la entidad.
+
 # **Gestión de incidentes**
 
 Se utilizará el siguiente flujo de trabajo para abordar la gestión de los defectos que lleguen a encontrarse:
