@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa 2: Contenedor para ejecutar el JAR
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-alpine
 
 # Establece el directorio de trabajo
 WORKDIR /app
