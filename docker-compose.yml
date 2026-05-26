@@ -25,10 +25,11 @@ services:
     networks:
       - app-network-cra
     healthcheck:
-      test: [ "CMD","mysql", "-u", "root", "-pblogginPassword" ]
-      interval: 30s
-      timeout: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "blogginUser", "-pblogginPassword"]
+      interval: 10s
+      timeout: 5s
       retries: 5
+      start_period: 15s
   #  --------------------------------------------
   adminer-cra:
     image: adminer
