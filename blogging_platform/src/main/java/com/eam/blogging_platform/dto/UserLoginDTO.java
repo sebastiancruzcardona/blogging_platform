@@ -5,12 +5,13 @@ import jakarta.validation.constraints.*;
 public class UserLoginDTO {
 
     @NotBlank(message = "A name must be provided")
-    @Size(min = 1, max = 60, message = "Not a valid name, 1 character as minimum, 60 as maximum")
+    @Size(min = 3, max = 40, message = "Not a valid name, 3 character as minimum, 40 as maximum")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])[a-zA-Z0-9_.-]+$", message = "Username must contain at least one letter and can only contain letters, numbers, dots, dashes and underscores")
     private String username;
 
     @NotBlank(message = "A password must be provided")
-    @Size(min = 4, max = 80, message = "Not a valid password, 4 character as minimum, 80 as maximum")
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[@#$%^&+=!]).+$", message = "The password must contain at least one number and one special character")
+    @Size(min = 8, max = 80, message = "Not a valid password, 8 character as minimum, 80 as maximum")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).+$", message = "The password must contain at least one lowercase letter, one uppercase letter, one number and one special character")
     private String password;
 
     public String getUsername() {

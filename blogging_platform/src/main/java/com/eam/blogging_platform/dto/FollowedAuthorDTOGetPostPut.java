@@ -2,14 +2,18 @@ package com.eam.blogging_platform.dto;
 
 import com.eam.blogging_platform.entity.FollowedAuthor;
 
+import jakarta.validation.constraints.Min;
+
 import java.time.LocalDateTime;
 
 public class FollowedAuthorDTOGetPostPut {
 
     private Long id;
 
+    @Min(1)
     private Long followerId;
 
+    @Min(1)
     private Long authorId;
 
     private LocalDateTime creationDate;

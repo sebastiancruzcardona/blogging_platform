@@ -4,11 +4,19 @@ import com.eam.blogging_platform.entity.Tag;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 public class TagDtoGetPostPut {
 
     private Long id;
+    
+    @NotBlank(message = "A tag must be provided")
+    @Size(min = 2, max = 40, message = "Not a valid tag")
+    @Pattern(regexp = "^[^0-9]*$", message = "Cannot contain numbers")
     private String tag;
+    
     private LocalDateTime creation_date;
 
     public Long getId() {

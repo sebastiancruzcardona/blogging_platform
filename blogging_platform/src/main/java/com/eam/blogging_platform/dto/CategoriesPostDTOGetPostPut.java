@@ -7,8 +7,10 @@ public class CategoriesPostDTOGetPostPut {
 
     private Long id;
 
+    @Min(1)
     private Long postId;
 
+    @Min(1)
     private Long categoryId;
 
     // Getters and Setters

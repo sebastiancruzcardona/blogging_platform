@@ -3,14 +3,18 @@ package com.eam.blogging_platform.dto;
 import com.eam.blogging_platform.entity.FollowedAuthor;
 import com.eam.blogging_platform.entity.TagsPost;
 
+import jakarta.validation.constraints.Min;
+
 import java.time.LocalDateTime;
 
 public class Tag_PostDtoGetPostPut {
 
     private Long id;
 
+    @Min(1)
     private Long postId;
 
+    @Min(1)
     private Long tagId;
 
     public Long getId() {

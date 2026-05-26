@@ -3,18 +3,30 @@ package com.eam.blogging_platform.dto;
 import com.eam.blogging_platform.entity.Comment;
 import com.eam.blogging_platform.entity.Post;
 
+import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 public class PostDtoGetPostPut {
 
     private Long id;
 
+    @NotBlank(message = "A title must be provided")
+    @Size(min = 1, max = 150, message = "Not a valid title, 1 character as minimum, 150 as maximum")
+    @Pattern(regexp = "(?s)^(?!.*\\d{21})(?=.*[a-zA-Z]).*$", message = "Must contain at least one letter and cannot contain more than 20 consecutive numbers")
     private String title;
 
+    @NotBlank(message = "Content must be provided")
+    @Size(min = 1, max = 6000, message = "Not valid content, 1 character as minimum, 6000 as maximum")
+    @Pattern(regexp = "(?s)^(?!.*\\d{21})(?=.*[a-zA-Z]).*$", message = "Must contain at least one letter and cannot contain more than 20 consecutive numbers")
     private String content;
 
+    @NotNull(message = "User ID must be provided")
+    @Min(value = 1, message = "User ID must be greater than or equal to 1")
     private Long userId;
 
+    @NotNull(message = "Status ID must be provided")
+    @Min(value = 1, message = "Status ID must be greater than or equal to 1")
     private Long statusId;
 
     private int likes;
