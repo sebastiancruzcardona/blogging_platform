@@ -204,4 +204,5 @@ class UserServiceTest {
         assertEquals("sebastian_admin", result.get().getUsername());
         verify(userRepository, times(1)).findByUsername("sebastian_admin");
     }
+    
 }
