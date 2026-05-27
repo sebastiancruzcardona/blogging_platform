@@ -66,7 +66,7 @@ class PostServiceTest {
         User user = new User(1L, "admin123", "admin@demo.com", "hash", LocalDateTime.now(), role);
         Status status = new Status(1, "Draft");
 
-        Post savedPost = new Post(1L, user, "New Post", "Post content", 5, 5, LocalDateTime.now(), LocalDateTime.now(), null);
+        Post savedPost = new Post(1L, user, "New Post", "Post content", 0, 0, LocalDateTime.now(), LocalDateTime.now(), null);
         savedPost.setStatus(status);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
